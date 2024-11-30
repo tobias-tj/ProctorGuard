@@ -4,6 +4,7 @@ import CountChart from "../../components/admin/CountChart";
 import EventCalendar from "../../components/admin/EventCalendar";
 import FinanceChart from "../../components/admin/FinanceChart";
 import UserCard from "../../components/admin/UserCard";
+import { Button } from "@/components/ui/button";
 
 const AdminPage = () => {
   return (
@@ -14,6 +15,9 @@ const AdminPage = () => {
         <div className="flex gap-4 justify-between flex-wrap">
           <UserCard type="Estudiantes" count={0} />
           <UserCard type="Examenes" count={0} />
+        </div>
+        <div>
+          <Button>Hola loco</Button>
         </div>
         {/* MIDDLE CHARTS */}
         <div className="flex gap-4 flex-col lg:flex-row">
