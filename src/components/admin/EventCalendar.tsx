@@ -30,13 +30,15 @@ export function EventCalendar() {
   );
 
   return (
-    <div className="p-4 bg-white rounded-md">
-      <Calendar
-        mode="single"
-        selected={selectedDate}
-        onSelect={setSelectedDate}
-        className="border rounded-md "
-      />
+    <div className="p-4 rounded-md shadow-lg bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
+      <div className="flex justify-center">
+        <Calendar
+          mode="single"
+          selected={selectedDate}
+          onSelect={setSelectedDate}
+          className="border rounded-md "
+        />
+      </div>
 
       <div className="flex items-center justify-between mt-4">
         <h1 className="text-xl font-semibold">Eventos</h1>

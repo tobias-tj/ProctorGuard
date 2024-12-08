@@ -73,7 +73,7 @@ export function AppSidebar() {
     <Sidebar className="w-64 bg-gray-100">
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel className="px-4 py-2 text-[18px] font-bold mb-6 text-black ">
+          <SidebarGroupLabel className="px-4 py-2 text-[18px] font-bold mb-6 text-black dark:text-white ">
             <img
               src="/logoAdmin.png"
               alt="ProctorGuard"
@@ -93,7 +93,7 @@ export function AppSidebar() {
                   <SidebarMenuButton asChild>
                     <a
                       href={project.url}
-                      className="flex items-center gap-4 px-4 py-3 transition-all rounded-lg text-gray-950 hover:bg-gray-300 hover:text-gray-600"
+                      className="flex items-center gap-4 px-4 py-3 transition-all rounded-lg"
                     >
                       <project.icon className="w-5 h-5" />
                       <span className="text-sm font-medium">
@@ -117,7 +117,7 @@ export function AppSidebar() {
                   <SidebarMenuButton asChild>
                     <a
                       href={config.url}
-                      className="flex items-center gap-4 px-4 py-3 transition-all rounded-lg text-gray-950 hover:bg-gray-300 hover:text-gray-600"
+                      className="flex items-center gap-4 px-4 py-3 transition-all rounded-lg"
                     >
                       <config.icon className="w-5 h-5" />
                       <span className="text-sm font-medium">{config.name}</span>

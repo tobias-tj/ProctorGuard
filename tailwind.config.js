@@ -10,11 +10,6 @@ export default {
         sm: "calc(var(--radius) - 4px)",
       },
       colors: {
-        lamaSky: "#C3E8FA",
-        lamaSkyLight: "#EDF9FD",
-        lamaPurple: "#CFCEFF",
-        lamaYellow: "#FAE27C",
-        lamaYellowLight: "#FEFC8",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         card: {
@@ -26,7 +21,7 @@ export default {
           foreground: "hsl(var(--popover-foreground))",
         },
         primary: {
-          DEFAULT: "hsl(var(--primary))",
+          DEFAULT: "hsl(var(--chart-1))",
           foreground: "hsl(var(--primary-foreground))",
         },
         secondary: {

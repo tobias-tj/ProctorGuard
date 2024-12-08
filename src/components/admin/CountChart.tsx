@@ -1,66 +1,127 @@
-import { Ellipsis } from "lucide-react";
-import { RadialBarChart, RadialBar, ResponsiveContainer } from "recharts";
+import { useState } from "react";
+import { Settings } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { PieChart, Pie, Cell, ResponsiveContainer, Sector } from "recharts";
+import { Button } from "../ui/button";
 
 const data = [
-  {
-    name: "Total",
-    count: 100,
-    fill: "white",
-  },
-  {
-    name: "Girls",
-    count: 45,
-    fill: "#FAE27C",
-  },
-  {
-    name: "Boys",
-    count: 60,
-    fill: "#C3EBFA",
-  },
+  { name: "Examenes Correctos", value: 1634, color: "hsl(var(--chart-2))" },
+  { name: "Examenes Incidentes", value: 1234, color: "hsl(var(--chart-1))" },
 ];
 
-const CountChart = () => {
+const renderActiveShape = (props: any) => {
+  const { cx, cy, innerRadius, outerRadius, startAngle, endAngle, fill } =
+    props;
   return (
-    <div className="bg-white rounded-xl w-full h-full p-4">
-      {/* TITLE */}
-      <div className="flex justify-between items-center">
-        <h1 className="text-lg font-semibold">Total</h1>
-        <Ellipsis width={20} height={20} />
-      </div>
-      {/* CHART */}
-      <div className="relative w-full h-[75%]">
-        <ResponsiveContainer width="100%" height="100%">
-          <RadialBarChart
-            cx="50%"
-            cy="50%"
-            innerRadius="40%"
-            outerRadius="100%"
-            barSize={32}
-            data={data}
-          >
-            <RadialBar background dataKey="count" />
-          </RadialBarChart>
-        </ResponsiveContainer>
-        <img
-          src="/controlSecurity.png"
-          className="h-20 w-20 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-        />
-      </div>
-      {/* BOTTOM */}
-      <div className="flex justify-center gap-16">
-        <div className="flex flex-col gap-1">
-          <div className="w-5 h-5 bg-lamaSky rounded-full" />
-          <h1 className="font-bold">1,634</h1>
-          <h2 className="text-xs text-gray-300">Examenes Correctos</h2>
-        </div>
-        <div className="flex flex-col gap-1">
-          <div className="w-5 h-5 bg-lamaYellow rounded-full" />
-          <h1 className="font-bold">1,234</h1>
-          <h2 className="text-xs text-gray-300">Examenes Incidentes</h2>
-        </div>
-      </div>
-    </div>
+    <g>
+      <Sector
+        cx={cx}
+        cy={cy}
+        innerRadius={innerRadius}
+        outerRadius={outerRadius + 6}
+        startAngle={startAngle}
+        endAngle={endAngle}
+        fill={fill}
+      />
+    </g>
   );
 };
 
-export default CountChart;
+export function CountChart() {
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+
+  const onPieEnter = (_: any, index: number) => {
+    setActiveIndex(index);
+  };
+
+  const onPieLeave = () => {
+    setActiveIndex(null);
+  };
+
+  const total = data.reduce((sum, item) => sum + item.value, 0);
+
+  return (
+    <Card className="w-full h-full shadow-lg bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
+      <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+        <CardTitle className="text-2xl font-bold text-gray-800 dark:text-gray-100">
+          Total de Exámenes
+        </CardTitle>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="h-[30px]"
+          onClick={() => console.log("Configuración")}
+        >
+          <Settings className="w-5 h-5" />
+        </Button>
+      </CardHeader>
+      <CardContent>
+        <div className="relative h-[250px]">
+          <ResponsiveContainer width="100%" height="100%">
+            <PieChart>
+              <Pie
+                data={data}
+                cx="50%"
+                cy="50%"
+                innerRadius={60}
+                outerRadius={80}
+                fill="#8884d8"
+                paddingAngle={5}
+                dataKey="value"
+                onMouseEnter={onPieEnter}
+                onMouseLeave={onPieLeave}
+                activeIndex={activeIndex}
+                activeShape={renderActiveShape}
+              >
+                {data.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.color} />
+                ))}
+              </Pie>
+            </PieChart>
+          </ResponsiveContainer>
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="text-center">
+              <p className="text-4xl font-bold text-gray-800 dark:text-gray-100">
+                {total.toLocaleString()}
+              </p>
+              <p className="text-sm text-gray-500 dark:text-gray-400">Total</p>
+            </div>
+          </div>
+        </div>
+        <div className="flex justify-center gap-8 mt-6">
+          {data.map((item, index) => (
+            <TooltipProvider key={index}>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <div className="flex flex-col items-center gap-2 transition-transform duration-200 ease-in-out transform hover:scale-105">
+                    <div
+                      className="w-6 h-6 rounded-full"
+                      style={{ backgroundColor: item.color }}
+                    />
+                    <h1 className="text-xl font-bold text-gray-800 dark:text-gray-100">
+                      {item.value.toLocaleString()}
+                    </h1>
+                    <h2 className="text-sm text-gray-500 dark:text-gray-400">
+                      {item.name}
+                    </h2>
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>
+                    {item.name}: {((item.value / total) * 100).toFixed(1)}%
+                  </p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          ))}
+        </div>
+      </CardContent>
+    </Card>
+  );
+}

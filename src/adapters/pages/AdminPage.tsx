@@ -1,7 +1,7 @@
 import { EventCalendar } from "@/components/admin/EventCalendar";
 import Announcements from "../../components/admin/Announcements";
-import AttendanceChart from "../../components/admin/AttendanceChart";
-import CountChart from "../../components/admin/CountChart";
+import { AttendanceChart } from "@/components/admin/AttendanceChart";
+import { CountChart } from "@/components/admin/CountChart";
 import FinanceChart from "../../components/admin/FinanceChart";
 import UserCard from "../../components/admin/UserCard";
 
@@ -18,11 +18,11 @@ const AdminPage = () => {
         {/* MIDDLE CHARTS */}
         <div className="flex flex-col gap-4 lg:flex-row">
           {/* COUNT CHART */}
-          <div className="w-full lg:w-1/3 h-[450px]">
+          <div className="w-full lg:w-1/3 h-[490px]">
             <CountChart />
           </div>
           {/* ATTENDANCE CHART */}
-          <div className="w-full lg:w-2/3 h-[450px]">
+          <div className="w-full lg:w-2/3 h-[490px]">
             <AttendanceChart />
           </div>
         </div>
