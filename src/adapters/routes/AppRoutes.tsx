@@ -1,7 +1,7 @@
-import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import DashboardLayout from "../../layouts/Dashboard";
 import AdminPage from "../pages/AdminPage";
+import DashboardLayout from "@/layouts/Dashboard";
+import Navbar from "@/components/dashboard/Navbar";
 
 function AppRoutes() {
   return (
@@ -11,6 +11,7 @@ function AppRoutes() {
           path="/"
           element={
             <DashboardLayout>
+              <Navbar />
               <AdminPage />
             </DashboardLayout>
           }

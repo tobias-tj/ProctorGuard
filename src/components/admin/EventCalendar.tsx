@@ -1,9 +1,8 @@
+import * as React from "react";
 import { Ellipsis } from "lucide-react";
-import { useState } from "react";
-import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css";
+import { Calendar } from "@/components/ui/calendar";
 
-// TEMPORARY
+// TEMPORARY EVENTS
 const events = [
   {
     id: 1,
@@ -24,35 +23,39 @@ const events = [
     description: "Lorem ipsum parsask slai salsmon, ska lol konsa elit.",
   },
 ];
-const EventCalendar = () => {
-  type ValuePiece = Date | null;
 
-  type Value = ValuePiece | [ValuePiece, ValuePiece];
-  const [value, onChange] = useState<Value>(new Date());
+export function EventCalendar() {
+  const [selectedDate, setSelectedDate] = React.useState<Date | undefined>(
+    new Date()
+  );
 
   return (
-    <div className="bg-white p-4 rounded-md">
-      <Calendar onChange={onChange} value={value} />
-      <div className="flex items-center justify-between">
-        <h1 className="text-xl font-semibold my-4">Eventos</h1>
+    <div className="p-4 bg-white rounded-md">
+      <Calendar
+        mode="single"
+        selected={selectedDate}
+        onSelect={setSelectedDate}
+        className="border rounded-md "
+      />
+
+      <div className="flex items-center justify-between mt-4">
+        <h1 className="text-xl font-semibold">Eventos</h1>
         <Ellipsis width={20} height={20} />
       </div>
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-4 mt-4">
         {events.map((event) => (
           <div
-            className="p-5 rounded-md border-2 border-gray-100 border-t-4 odd:border-t-lamaSky even:border-t-lamaPurple"
+            className="p-5 border border-gray-100 rounded-md shadow-md odd:border-lamaSky even:border-lamaPurple"
             key={event.id}
           >
             <div className="flex items-center justify-between">
-              <h1 className="font-semibold text-gray-600">{event.title}</h1>
-              <span className="text-gray-300 text-xs">{event.time}</span>
+              <p className="font-semibold text-gray-600">{event.title}</p>
+              <span className="text-xs text-gray-300">{event.time}</span>
             </div>
-            <p className="mt-2 text-gray-400 text-sm">{event.description}</p>
+            <p className="mt-2 text-sm text-gray-400">{event.description}</p>
           </div>
         ))}
       </div>
     </div>
   );
-};
-
-export default EventCalendar;
+}

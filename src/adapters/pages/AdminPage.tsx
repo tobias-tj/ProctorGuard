@@ -1,26 +1,22 @@
+import { EventCalendar } from "@/components/admin/EventCalendar";
 import Announcements from "../../components/admin/Announcements";
 import AttendanceChart from "../../components/admin/AttendanceChart";
 import CountChart from "../../components/admin/CountChart";
-import EventCalendar from "../../components/admin/EventCalendar";
 import FinanceChart from "../../components/admin/FinanceChart";
 import UserCard from "../../components/admin/UserCard";
-import { Button } from "@/components/ui/button";
 
 const AdminPage = () => {
   return (
-    <div className="p-4 flex gap-4 flex-col md:flex-row">
+    <div className="flex flex-col gap-4 p-4 md:flex-row ">
       {/* LEFT */}
-      <div className="w-full lg:w-2/3 flex flex-col gap-8">
+      <div className="flex flex-col w-full gap-8 lg:w-2/3">
         {/* USER CARDS */}
-        <div className="flex gap-4 justify-between flex-wrap">
+        <div className="flex flex-wrap justify-between gap-4">
           <UserCard type="Estudiantes" count={0} />
           <UserCard type="Examenes" count={0} />
         </div>
-        <div>
-          <Button>Hola loco</Button>
-        </div>
         {/* MIDDLE CHARTS */}
-        <div className="flex gap-4 flex-col lg:flex-row">
+        <div className="flex flex-col gap-4 lg:flex-row">
           {/* COUNT CHART */}
           <div className="w-full lg:w-1/3 h-[450px]">
             <CountChart />
@@ -36,7 +32,7 @@ const AdminPage = () => {
         </div>
       </div>
       {/* RIGHT */}
-      <div className="w-full lg:w-1/3 flex flex-col gap-8">
+      <div className="flex flex-col w-full gap-8 lg:w-1/3">
         <EventCalendar />
         <Announcements />
       </div>
