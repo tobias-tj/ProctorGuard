@@ -23,27 +23,27 @@ import {
 // Menu items.
 const projects = [
   {
-    url: "#",
+    url: "/",
     icon: Home,
     name: "Inicio",
   },
   {
-    url: "#",
+    url: "/list/students",
     icon: Users,
     name: "Estudiantes",
   },
   {
-    url: "#",
+    url: "/list/exams",
     icon: NotebookPen,
     name: "Examenes",
   },
   {
-    url: "#",
+    url: "/announcement",
     icon: Megaphone,
     name: "Anuncios",
   },
   {
-    url: "#",
+    url: "/events",
     icon: CalendarRange,
     name: "Eventos",
   },
@@ -52,18 +52,18 @@ const projects = [
 // Menu Config
 const config = [
   {
-    url: "#",
+    url: "/account",
     icon: UserPen,
     name: "Mi Cuenta",
   },
 
   {
-    url: "#",
+    url: "/help",
     icon: MessageCircleQuestionIcon,
     name: "Ayuda",
   },
   {
-    url: "#",
+    url: "/close",
     icon: PowerIcon,
     name: "Cerrar Session",
   },

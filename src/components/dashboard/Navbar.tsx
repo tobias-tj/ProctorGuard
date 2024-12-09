@@ -18,8 +18,8 @@ const Navbar = () => {
   }
   return (
     <div className="flex items-center justify-between p-4">
-      {/* SEARCH BAR */}
-      <div className="relative items-center hidden gap-2 md:flex">
+      {/* FUTURO ICONO O NOMBRE DE LA UNIVERSIDAD */}
+      {/* <div className="relative items-center hidden gap-2 md:flex">
         <Search
           className="absolute text-gray-400 transform -translate-y-1/2 left-3 top-1/2"
           width={14}
@@ -30,7 +30,7 @@ const Navbar = () => {
           placeholder="Search..."
           className="w-[200px] pl-9 pr-3 py-2 text-xs rounded-full bg-transparent border-[1.5px] border-gray-300 focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-gray-400"
         />
-      </div>
+      </div> */}
 
       {/* ICONS AND USER */}
       <div className="flex items-center justify-end w-full gap-6">
