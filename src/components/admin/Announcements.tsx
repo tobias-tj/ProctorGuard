@@ -1,34 +1,22 @@
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-} from "@/components/ui/card";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "../ui/button";
-import { Settings } from "lucide-react";
 
 const announcements = [
   {
-    title: "Lorep ipsum dolr sit",
-    date: "2025-01-01",
+    title: "Bienvenido a tu dashboard",
+    date: "04/10/25",
     content:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Volsas, expedia. Rerus, qusnd falis?",
-    bgColor: "bg-primary",
+      "Consulta el material de ayuda, si necesita alguna informacion adicional.",
   },
   {
-    title: "Lorep ipsum dolr sit",
-    date: "2025-01-01",
-    content:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Volsas, expedia. Rerus, qusnd falis?",
-    bgColor: "bg-primary",
+    title: "Actualizacion recibida",
+    date: "02/08/25",
+    content: "Nueva Version 2.0 realizada con exito.",
   },
   {
-    title: "Lorep ipsum dolr sit",
-    date: "2025-01-01",
-    content:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Volsas, expedia. Rerus, qusnd falis?",
-    bgColor: "bg-primary",
+    title: "Pendiente de pago",
+    date: "03/09/25",
+    content: "Se esta terminando el saldo de tu cuenta.",
   },
 ];
 
@@ -52,7 +40,7 @@ const Announcements = () => {
         {announcements.map((announcement, index) => (
           <div
             key={index}
-            className={`${announcement.bgColor} p-4 rounded-md transition-all hover:shadow-lg`}
+            className="p-5 border border-gray-100 rounded-md shadow-md"
           >
             <div className="flex items-center justify-between">
               <h2 className="font-medium">{announcement.title}</h2>
@@ -60,7 +48,7 @@ const Announcements = () => {
                 {announcement.date}
               </span>
             </div>
-            <p className="mt-2 text-sm text-gray-600">{announcement.content}</p>
+            <p className="mt-2 text-sm">{announcement.content}</p>
           </div>
         ))}
       </CardContent>

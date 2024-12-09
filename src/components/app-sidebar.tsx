@@ -70,7 +70,7 @@ const config = [
 ];
 export function AppSidebar() {
   return (
-    <Sidebar className="w-64 bg-gray-100">
+    <Sidebar className="w-64 shadow-lg bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel className="px-4 py-2 text-[18px] font-bold mb-6 text-black dark:text-white ">

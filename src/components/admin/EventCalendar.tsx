@@ -1,26 +1,29 @@
 import * as React from "react";
 import { Ellipsis } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
+import { Button } from "../ui/button";
 
 // TEMPORARY EVENTS
 const events = [
   {
     id: 1,
-    title: "Lorep ipsum dsad",
-    time: "12:00 PM - 2:00 PM",
-    description: "Lorem ipsum parsask slai salsmon, ska lol konsa elit.",
+    title: "Semana 1",
+    description: "Visualizar resumen de examenes de la primera semana.",
+    day: "20/10/25",
   },
   {
     id: 2,
-    title: "Lorep ipsum dsad",
-    time: "12:00 PM - 2:00 PM",
-    description: "Lorem ipsum parsask slai salsmon, ska lol konsa elit.",
+    title: "Importante",
+    description:
+      "Examenes muy importantes de las materias fundamentas de la carrera de tecnologia.",
+    day: "22/10/25",
   },
   {
     id: 3,
-    title: "Lorep ipsum dsad",
-    time: "12:00 PM - 2:00 PM",
-    description: "Lorem ipsum parsask slai salsmon, ska lol konsa elit.",
+    title: "Refuerzo",
+    description:
+      "Empiezan los examenes de segunda oportunidad de este semestre.",
+    day: "28/10/25",
   },
 ];
 
@@ -42,7 +45,14 @@ export function EventCalendar() {
 
       <div className="flex items-center justify-between mt-4">
         <h1 className="text-xl font-semibold">Eventos</h1>
-        <Ellipsis width={20} height={20} />
+        <Button
+          variant="ghost"
+          size="icon"
+          className="h-[40px] w-[80px]"
+          onClick={() => console.log("Configuración")}
+        >
+          Ver Mas
+        </Button>
       </div>
       <div className="flex flex-col gap-4 mt-4">
         {events.map((event) => (
@@ -51,10 +61,12 @@ export function EventCalendar() {
             key={event.id}
           >
             <div className="flex items-center justify-between">
-              <p className="font-semibold text-gray-600">{event.title}</p>
-              <span className="text-xs text-gray-300">{event.time}</span>
+              <p className="font-semibold">{event.title}</p>
+              <span className="px-2 py-1 text-xs text-gray-500 bg-white rounded-md">
+                {event.day}
+              </span>
             </div>
-            <p className="mt-2 text-sm text-gray-400">{event.description}</p>
+            <p className="mt-2 text-sm">{event.description}</p>
           </div>
         ))}
       </div>
