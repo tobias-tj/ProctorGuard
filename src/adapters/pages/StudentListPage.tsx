@@ -26,6 +26,7 @@ const columns = [
   {
     header: "Nombre Completo",
     accessor: "info",
+    className: "hidden md:table-cell",
   },
   {
     header: "CI",
@@ -48,7 +49,7 @@ const columns = [
   },
 ];
 
-const StudentPage = () => {
+const StudentListPage = () => {
   const renderRow = (item: Student) => (
     <TableRow key={item.id} className="text-sm border-b border-gray-200 ">
       <TableCell>
@@ -138,4 +139,4 @@ const StudentPage = () => {
   );
 };
 
-export default StudentPage;
+export default StudentListPage;

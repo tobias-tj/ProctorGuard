@@ -2,7 +2,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import AdminPage from "../pages/AdminPage";
 import DashboardLayout from "@/layouts/Dashboard";
 import Navbar from "@/components/dashboard/Navbar";
-import StudentPage from "../pages/StudentPage";
+import StudentListPage from "../pages/StudentListPage";
+import ExamListPage from "../pages/ExamListPage";
 
 function AppRoutes() {
   return (
@@ -22,7 +23,16 @@ function AppRoutes() {
           element={
             <DashboardLayout>
               <Navbar />
-              <StudentPage />
+              <StudentListPage />
+            </DashboardLayout>
+          }
+        />
+        <Route
+          path="/list/exams"
+          element={
+            <DashboardLayout>
+              <Navbar />
+              <ExamListPage />
             </DashboardLayout>
           }
         />
