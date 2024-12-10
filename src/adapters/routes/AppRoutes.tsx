@@ -9,6 +9,9 @@ import EventPage from "../pages/EventPage";
 import AccountPage from "../pages/AccountPage";
 import HelpPage from "../pages/HelpPage";
 import ClosePage from "../pages/ClosePage";
+import ExamByStudentById from "../pages/ExamByStudentIdPage";
+import StudentByExamIdPage from "../pages/StudentByExamIdPage";
+import StudentByExamId from "../pages/StudentByExamIdPage";
 
 function AppRoutes() {
   return (
@@ -83,6 +86,24 @@ function AppRoutes() {
             <DashboardLayout>
               <Navbar title="" />
               <ClosePage />
+            </DashboardLayout>
+          }
+        />
+        <Route
+          path="/list/exams/:studentId"
+          element={
+            <DashboardLayout>
+              <Navbar title="" />
+              <ExamByStudentById />
+            </DashboardLayout>
+          }
+        />
+        <Route
+          path="/list/students/:examId"
+          element={
+            <DashboardLayout>
+              <Navbar title="" />
+              <StudentByExamId />
             </DashboardLayout>
           }
         />

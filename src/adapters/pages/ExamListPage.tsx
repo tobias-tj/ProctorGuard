@@ -1,6 +1,5 @@
 import { Exam } from "@/types/Exam";
-import { Eye, Trash, Filter, ListOrdered } from "lucide-react";
-import FormModal from "@/components/list/FormModal";
+import { Eye, Filter, ListOrdered } from "lucide-react";
 import { examsData } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 import {

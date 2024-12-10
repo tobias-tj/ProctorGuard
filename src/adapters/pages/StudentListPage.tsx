@@ -51,7 +51,10 @@ const columns = [
 
 const StudentListPage = () => {
   const renderRow = (item: Student) => (
-    <TableRow key={item.id} className="text-sm border-b border-gray-200 ">
+    <TableRow
+      key={item.studentId}
+      className="text-sm border-b border-gray-200 "
+    >
       <TableCell>
         <div className="flex items-center gap-4">
           <div className="flex flex-col">
@@ -74,7 +77,7 @@ const StudentListPage = () => {
           <FormModal
             table="student"
             type="delete"
-            id={item.id}
+            id={Number(item.studentId)}
             trigger={
               <Button variant="outline" className="p-2 rounded-full">
                 <Trash size={16} />
