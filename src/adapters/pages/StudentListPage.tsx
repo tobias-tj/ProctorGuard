@@ -87,7 +87,7 @@ const StudentListPage = () => {
   );
 
   return (
-    <div className="flex-1 w-full min-h-screen p-4 shadow-lg bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
+    <div className="flex-1 w-full min-h-screen p-4 shadow-lg bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 lg:w-[900px] sm:w-[400px]">
       {/* TOP */}
       <div className="flex items-center justify-between mb-4">
         <h1 className="text-lg font-semibold text-primary">

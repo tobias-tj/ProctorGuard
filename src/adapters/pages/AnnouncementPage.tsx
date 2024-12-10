@@ -52,7 +52,7 @@ const AnnouncementPage = () => {
   };
 
   return (
-    <div className="h-full p-4 space-y-4">
+    <div className="h-full p-4 space-y-4 lg:w-[900px] sm:w-[400px]">
       <div className="space-y-4">
         {announcements.map(({ id, title, date, message, read }) => (
           <Card

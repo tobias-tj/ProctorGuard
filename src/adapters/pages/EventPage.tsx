@@ -51,7 +51,7 @@ const EventPage = () => {
         mode="single"
         onSelect={(date) => setSelectedDate(date)}
         onDayClick={(date) => handleDoubleClick(date)}
-        className="border rounded-lg shadow-lg "
+        className="border rounded-lg shadow-lg"
       />
       <div className="mt-6 ">
         <h2 className="text-xl font-semibold">Eventos</h2>

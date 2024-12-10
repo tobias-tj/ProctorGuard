@@ -7,6 +7,7 @@ import ExamListPage from "../pages/ExamListPage";
 import AnnouncementPage from "../pages/AnnouncementPage";
 import EventPage from "../pages/EventPage";
 import AccountPage from "../pages/AccountPage";
+import HelpPage from "../pages/HelpPage";
 
 function AppRoutes() {
   return (
@@ -63,6 +64,15 @@ function AppRoutes() {
             <DashboardLayout>
               <Navbar title="Cuenta" />
               <AccountPage />
+            </DashboardLayout>
+          }
+        />
+        <Route
+          path="/help"
+          element={
+            <DashboardLayout>
+              <Navbar title="Ayuda" />
+              <HelpPage />
             </DashboardLayout>
           }
         />
