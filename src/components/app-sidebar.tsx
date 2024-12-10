@@ -20,6 +20,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { useLocation } from "react-router-dom";
+import CreditCard from "./CreditCard";
 
 // Menu items.
 const projects = [
@@ -140,6 +141,12 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+      <div className="p-4 mt-auto rounded-t-lg ">
+        <h2 className="mb-2 text-sm font-semibold text-center">
+          Resumen de Créditos
+        </h2>
+        <CreditCard availableCredit={1000} totalUsage={400} />
+      </div>
     </Sidebar>
   );
 }
