@@ -6,6 +6,7 @@ import StudentListPage from "../pages/StudentListPage";
 import ExamListPage from "../pages/ExamListPage";
 import AnnouncementPage from "../pages/AnnouncementPage";
 import EventPage from "../pages/EventPage";
+import AccountPage from "../pages/AccountPage";
 
 function AppRoutes() {
   return (
@@ -53,6 +54,15 @@ function AppRoutes() {
             <DashboardLayout>
               <Navbar title="Eventos" />
               <EventPage />
+            </DashboardLayout>
+          }
+        />
+        <Route
+          path="/account"
+          element={
+            <DashboardLayout>
+              <Navbar title="Cuenta" />
+              <AccountPage />
             </DashboardLayout>
           }
         />
