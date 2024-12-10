@@ -77,16 +77,6 @@ const ExamListPage = () => {
               <Eye size={16} />
             </Button>
           </Link>
-          <FormModal
-            table="exam"
-            type="delete"
-            id={item.id}
-            trigger={
-              <Button variant="outline" className="p-2 rounded-full">
-                <Trash size={16} />
-              </Button>
-            }
-          />
         </div>
       </TableCell>
     </TableRow>

@@ -57,7 +57,7 @@ const AccountPage = () => {
   };
 
   return (
-    <div className="p-6 space-y-6 lg:w-[900px] sm:w-[400px]">
+    <div className="p-6 space-y-6 lg:w-[900px] sm:w-[400px] shadow-lg bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
       <Card>
         <CardHeader>
           <CardTitle>Información del Cliente</CardTitle>

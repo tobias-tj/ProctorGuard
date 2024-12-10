@@ -24,7 +24,7 @@ const HelpPage = () => {
   };
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-6 space-y-6 shadow-lg bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
       <p className="text-gray-600">
         Esta página está diseñada para ayudarte a entender cómo funciona nuestro
         dashboard y cómo puedes aprovechar sus herramientas para gestionar tus

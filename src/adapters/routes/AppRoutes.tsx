@@ -8,6 +8,7 @@ import AnnouncementPage from "../pages/AnnouncementPage";
 import EventPage from "../pages/EventPage";
 import AccountPage from "../pages/AccountPage";
 import HelpPage from "../pages/HelpPage";
+import ClosePage from "../pages/ClosePage";
 
 function AppRoutes() {
   return (
@@ -73,6 +74,15 @@ function AppRoutes() {
             <DashboardLayout>
               <Navbar title="Ayuda" />
               <HelpPage />
+            </DashboardLayout>
+          }
+        />
+        <Route
+          path="/close"
+          element={
+            <DashboardLayout>
+              <Navbar title="" />
+              <ClosePage />
             </DashboardLayout>
           }
         />
