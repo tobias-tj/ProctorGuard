@@ -4,6 +4,7 @@ import DashboardLayout from "@/layouts/Dashboard";
 import Navbar from "@/components/dashboard/Navbar";
 import StudentListPage from "../pages/StudentListPage";
 import ExamListPage from "../pages/ExamListPage";
+import AnnouncementPage from "../pages/AnnouncementPage";
 
 function AppRoutes() {
   return (
@@ -33,6 +34,15 @@ function AppRoutes() {
             <DashboardLayout>
               <Navbar title="Examenes" />
               <ExamListPage />
+            </DashboardLayout>
+          }
+        />
+        <Route
+          path="/announcement"
+          element={
+            <DashboardLayout>
+              <Navbar title="Anuncios" />
+              <AnnouncementPage />
             </DashboardLayout>
           }
         />
