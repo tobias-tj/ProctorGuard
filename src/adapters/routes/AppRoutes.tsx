@@ -13,7 +13,7 @@ function AppRoutes() {
           path="/"
           element={
             <DashboardLayout>
-              <Navbar />
+              <Navbar title="Dashboard" />
               <AdminPage />
             </DashboardLayout>
           }
@@ -22,7 +22,7 @@ function AppRoutes() {
           path="/list/students"
           element={
             <DashboardLayout>
-              <Navbar />
+              <Navbar title="Estudiantes" />
               <StudentListPage />
             </DashboardLayout>
           }
@@ -31,7 +31,7 @@ function AppRoutes() {
           path="/list/exams"
           element={
             <DashboardLayout>
-              <Navbar />
+              <Navbar title="Examenes" />
               <ExamListPage />
             </DashboardLayout>
           }

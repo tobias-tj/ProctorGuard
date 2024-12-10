@@ -19,6 +19,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { useLocation } from "react-router-dom";
 
 // Menu items.
 const projects = [
@@ -69,6 +70,8 @@ const config = [
   },
 ];
 export function AppSidebar() {
+  const location = useLocation();
+
   return (
     <Sidebar className="w-64 shadow-lg bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
       <SidebarContent>
@@ -93,7 +96,11 @@ export function AppSidebar() {
                   <SidebarMenuButton asChild>
                     <a
                       href={project.url}
-                      className="flex items-center gap-4 px-4 py-3 transition-all rounded-lg"
+                      className={`flex items-center gap-4 px-4 py-3 transition-all rounded-lg ${
+                        location.pathname === project.url
+                          ? "bg-gray-200 text-blue-600 font-bold border-l-4 border-blue-600"
+                          : "hover:bg-gray-100 dark:hover:bg-gray-700"
+                      }`}
                     >
                       <project.icon className="w-5 h-5" />
                       <span className="text-sm font-medium">
@@ -117,7 +124,11 @@ export function AppSidebar() {
                   <SidebarMenuButton asChild>
                     <a
                       href={config.url}
-                      className="flex items-center gap-4 px-4 py-3 transition-all rounded-lg"
+                      className={`flex items-center gap-4 px-4 py-3 transition-all rounded-lg ${
+                        location.pathname === config.url
+                          ? "bg-gray-200 text-blue-600 font-bold border-l-4 border-blue-600"
+                          : "hover:bg-gray-100 dark:hover:bg-gray-700"
+                      }`}
                     >
                       <config.icon className="w-5 h-5" />
                       <span className="text-sm font-medium">{config.name}</span>

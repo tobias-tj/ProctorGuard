@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { useTheme } from "@/theme-provider";
 
-const Navbar = () => {
+const Navbar = ({ title }) => {
   const [mounted, setMounted] = useState(false);
   const { theme, setTheme } = useTheme();
 
@@ -19,8 +19,9 @@ const Navbar = () => {
   return (
     <div className="flex items-center justify-between p-4">
       {/* FUTURO ICONO O NOMBRE DE LA UNIVERSIDAD */}
-      {/* <div className="relative items-center hidden gap-2 md:flex">
-        <Search
+      <div className="relative items-center hidden gap-2 md:flex">
+        <h1 className="text-[28px] font-bold text-primary font">{title}</h1>
+        {/* <Search
           className="absolute text-gray-400 transform -translate-y-1/2 left-3 top-1/2"
           width={14}
           height={14}
@@ -29,8 +30,8 @@ const Navbar = () => {
           type="text"
           placeholder="Search..."
           className="w-[200px] pl-9 pr-3 py-2 text-xs rounded-full bg-transparent border-[1.5px] border-gray-300 focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-gray-400"
-        />
-      </div> */}
+        /> */}
+      </div>
 
       {/* ICONS AND USER */}
       <div className="flex items-center justify-end w-full gap-6">
