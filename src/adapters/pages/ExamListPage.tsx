@@ -38,11 +38,6 @@ const columns = [
     className: "hidden md:table-cell",
   },
   {
-    header: "Porcentaje",
-    accessor: "percentage",
-    className: "hidden lg:table-cell",
-  },
-  {
     header: "Recibidos",
     accessor: "received",
     className: "hidden lg:table-cell",
@@ -67,7 +62,6 @@ const ExamListPage = () => {
       </TableCell>
       <TableCell className="hidden md:table-cell">{item.name}</TableCell>
       <TableCell className="hidden md:table-cell">{item.date}</TableCell>
-      <TableCell className="hidden md:table-cell">{item.percentage}</TableCell>
       <TableCell className="hidden md:table-cell">{item.received}</TableCell>
       <TableCell>
         <div className="flex items-center gap-2">

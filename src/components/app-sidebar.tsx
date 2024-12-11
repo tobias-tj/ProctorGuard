@@ -42,7 +42,7 @@ const projects = [
   {
     url: "/announcement",
     icon: Megaphone,
-    name: "Anuncios",
+    name: "Avisos",
   },
   {
     url: "/events",

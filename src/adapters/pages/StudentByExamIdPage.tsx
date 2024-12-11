@@ -59,7 +59,7 @@ const StudentByExamId = () => {
       </Button>
 
       <h1 className="mb-4 text-primary">
-        Estudiantes que rindieron el examen {examId}
+        Estudiantes que rindieron el examen con el id: {examId}
       </h1>
 
       <Table className="bg-white dark:bg-gray-400 rounded-xl">
@@ -67,9 +67,10 @@ const StudentByExamId = () => {
           <TableRow>
             <TableCell>Seleccionar</TableCell>
             <TableCell>Nombre del Estudiante</TableCell>
-            <TableCell>ID del Examen</TableCell>
+            <TableCell>CI</TableCell>
+            <TableCell>Nombre del Examen</TableCell>
             <TableCell>Fecha</TableCell>
-            <TableCell>Porcentaje</TableCell>
+            <TableCell>Puntos</TableCell>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -87,9 +88,10 @@ const StudentByExamId = () => {
                     />
                   </TableCell>
                   <TableCell>{student.name}</TableCell>
-                  <TableCell>{exam.id}</TableCell>
+                  <TableCell>{student.studentId}</TableCell>
+                  <TableCell>{exam.name}</TableCell>
                   <TableCell>{exam.date}</TableCell>
-                  <TableCell>{exam.percentage}</TableCell>
+                  <TableCell>{exam.puntos}</TableCell>
                   <TableCell>
                     <Button variant="outline">
                       <Download />

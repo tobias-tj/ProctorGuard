@@ -38,11 +38,7 @@ const columns = [
     accessor: "email",
     className: "hidden md:table-cell",
   },
-  {
-    header: "Telefono",
-    accessor: "phone",
-    className: "hidden lg:table-cell",
-  },
+
   {
     header: "Acciones",
     accessor: "action",
@@ -66,7 +62,6 @@ const StudentListPage = () => {
       </TableCell>
       <TableCell className="hidden md:table-cell">{item.studentId}</TableCell>
       <TableCell className="hidden md:table-cell">{item.email}</TableCell>
-      <TableCell className="hidden md:table-cell">{item.phone}</TableCell>
       <TableCell>
         <div className="flex items-center gap-2">
           <Link to={`/list/exams/${item.studentId}`}>

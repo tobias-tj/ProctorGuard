@@ -25,7 +25,7 @@ const Announcements = () => {
     <Card className="w-full shadow-lg bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
       <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
         <CardTitle className="text-xl font-semibold text-gray-800 dark:text-gray-100">
-          Anuncios
+          Avisos
         </CardTitle>
         <Button
           variant="ghost"

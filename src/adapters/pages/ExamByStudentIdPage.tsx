@@ -59,7 +59,7 @@ const ExamByStudentById = () => {
                 <TableCell>Seleccionar</TableCell>
                 <TableCell>Nombre del Examen</TableCell>
                 <TableCell>Fecha</TableCell>
-                <TableCell>Porcentaje</TableCell>
+                <TableCell>Puntos</TableCell>
                 <TableCell>Acciones</TableCell>
               </TableRow>
             </TableHeader>
@@ -76,7 +76,7 @@ const ExamByStudentById = () => {
                   </TableCell>
                   <TableCell>{exam.name}</TableCell>
                   <TableCell>{exam.date}</TableCell>
-                  <TableCell>{exam.percentage}</TableCell>
+                  <TableCell>{exam.puntos}</TableCell>
                   <TableCell>
                     <Button variant="outline">
                       <Download />

@@ -10,7 +10,6 @@ import AccountPage from "../pages/AccountPage";
 import HelpPage from "../pages/HelpPage";
 import ClosePage from "../pages/ClosePage";
 import ExamByStudentById from "../pages/ExamByStudentIdPage";
-import StudentByExamIdPage from "../pages/StudentByExamIdPage";
 import StudentByExamId from "../pages/StudentByExamIdPage";
 
 function AppRoutes() {
@@ -48,7 +47,7 @@ function AppRoutes() {
           path="/announcement"
           element={
             <DashboardLayout>
-              <Navbar title="Anuncios" />
+              <Navbar title="Avisos" />
               <AnnouncementPage />
             </DashboardLayout>
           }
