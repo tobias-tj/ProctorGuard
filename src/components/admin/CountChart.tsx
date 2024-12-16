@@ -2,15 +2,16 @@ import { useState } from "react";
 import { Settings } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { PieChart, Pie, Cell, ResponsiveContainer, Sector } from "recharts";
 import { Button } from "../ui/button";
+import { useDashboardData } from "@/hooks/useStudentInfo";
 
-const data = [
+const examData = [
   { name: "Examenes Correctos", value: 1634, color: "hsl(var(--chart-2))" },
   { name: "Examenes Incidentes", value: 1234, color: "hsl(var(--chart-1))" },
 ];
@@ -35,6 +36,13 @@ const renderActiveShape = (props: any) => {
 
 export function CountChart() {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const [currentData, setCurrentData] = useState(examData);
+  const [title, setTitle] = useState("Total de Exámenes");
+
+  const { dashboardData } = useDashboardData();
+
+  // Datos dinámicos para estudiantes
+  const studentData = getNewStudentData(dashboardData);
 
   const onPieEnter = (_: any, index: number) => {
     setActiveIndex(index);
@@ -44,29 +52,47 @@ export function CountChart() {
     setActiveIndex(null);
   };
 
-  const total = data.reduce((sum, item) => sum + item.value, 0);
+  const total = currentData.reduce((sum, item) => sum + item.value, 0);
 
   return (
     <Card className="w-full h-full shadow-lg bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
       <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
         <CardTitle className="text-2xl font-bold text-gray-800 dark:text-gray-100">
-          Total de Exámenes
+          {title}
         </CardTitle>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="h-[30px]"
-          onClick={() => console.log("Configuración")}
-        >
-          <Settings className="w-5 h-5" />
-        </Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="icon" className="h-[30px]">
+              <Settings className="w-5 h-5" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem
+              onClick={() => {
+                setCurrentData(examData);
+                setTitle("Total de Exámenes");
+              }}
+            >
+              Mostrar Exámenes
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => {
+                setCurrentData(studentData);
+                setTitle("Total de Estudiantes");
+              }}
+            >
+              Mostrar Estudiantes
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </CardHeader>
+
       <CardContent>
         <div className="relative h-[250px]">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
-                data={data}
+                data={currentData}
                 cx="50%"
                 cy="50%"
                 innerRadius={60}
@@ -79,7 +105,7 @@ export function CountChart() {
                 activeIndex={activeIndex}
                 activeShape={renderActiveShape}
               >
-                {data.map((entry, index) => (
+                {currentData.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={entry.color} />
                 ))}
               </Pie>
@@ -95,33 +121,48 @@ export function CountChart() {
           </div>
         </div>
         <div className="flex justify-center gap-8 mt-6">
-          {data.map((item, index) => (
-            <TooltipProvider key={index}>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <div className="flex flex-col items-center gap-2 transition-transform duration-200 ease-in-out transform hover:scale-105">
-                    <div
-                      className="w-6 h-6 rounded-full"
-                      style={{ backgroundColor: item.color }}
-                    />
-                    <h1 className="text-xl font-bold text-gray-800 dark:text-gray-100">
-                      {item.value.toLocaleString()}
-                    </h1>
-                    <h2 className="text-sm text-gray-500 dark:text-gray-400">
-                      {item.name}
-                    </h2>
-                  </div>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>
-                    {item.name}: {((item.value / total) * 100).toFixed(1)}%
-                  </p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+          {currentData.map((item, index) => (
+            <div
+              key={index}
+              className="flex flex-col items-center gap-2 transition-transform duration-200 ease-in-out transform hover:scale-105"
+            >
+              <div
+                className="w-6 h-6 rounded-full"
+                style={{ backgroundColor: item.color }}
+              />
+              <h1 className="text-xl font-bold text-gray-800 dark:text-gray-100">
+                {item.value.toLocaleString()}
+              </h1>
+              <h2 className="text-sm text-gray-500 dark:text-gray-400">
+                {item.name}
+              </h2>
+            </div>
           ))}
         </div>
       </CardContent>
     </Card>
   );
+}
+
+function getNewStudentData(
+  dashboardData: {
+    total_estudiantes: number;
+    total_estudiantes_con_incidencias: number;
+    total_estudiantes_sin_incidencias: number;
+  } | null
+) {
+  return dashboardData
+    ? [
+        {
+          name: "Estudiantes Correctos",
+          value: dashboardData.total_estudiantes_sin_incidencias,
+          color: "hsl(var(--chart-2))",
+        },
+        {
+          name: "Estudiantes Incidentes",
+          value: dashboardData.total_estudiantes_con_incidencias,
+          color: "hsl(var(--chart-1))",
+        },
+      ]
+    : [];
 }

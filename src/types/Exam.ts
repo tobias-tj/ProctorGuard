@@ -1,7 +1,7 @@
 export type Exam = {
-  id: number;
-  name: string;
-  date: string;
+  examen_id: number;
+  descripcion: string;
+  fecha: string;
   puntos: string;
   received?: number;
 };

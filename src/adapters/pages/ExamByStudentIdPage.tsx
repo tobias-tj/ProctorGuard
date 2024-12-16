@@ -6,16 +6,23 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { studentsData } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Download } from "lucide-react";
 import { useState } from "react";
+import { useListExamByStudentId } from "@/hooks/useStudentInfo";
+import formatDateToString from "@/utils/formatDateToString";
 
 const ExamByStudentById = () => {
-  const { studentId } = useParams<{ studentId: string }>();
+  const { studentId } = useParams<{
+    studentId: string;
+  }>();
   const navigate = useNavigate();
   const [selectedExams, setSelectedExams] = useState<string[]>([]);
-  const student = studentsData.find((s) => s.studentId === studentId);
+
+  const { examListData, loading, error } = useListExamByStudentId(
+    Number(studentId)
+  );
+  // const student = studentsData.find((s) => s.studentId === studentId);
 
   const handleSelectExam = (examId: string) => {
     setSelectedExams((prevSelected) => {
@@ -35,10 +42,31 @@ const ExamByStudentById = () => {
     alert(`Descargando informe de los exámenes: ${selectedExams.join(", ")}`);
   };
 
-  if (!student) {
+  // Si está cargando, muestra el texto "Cargando..."
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <p className="text-lg font-semibold text-primary">
+          Cargando estudiantes...
+        </p>
+      </div>
+    );
+  }
+
+  // Si ocurre un error, muestra el mensaje correspondiente
+  if (error) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <h1>Estudiante no encontrado</h1>
+        <h1 className="text-red-500">Ocurrió un error: {error}</h1>
+      </div>
+    );
+  }
+
+  // Si no hay datos disponibles
+  if (!examListData || examListData.length === 0) {
+    return (
+      <div className="flex items-center justify-center p-4">
+        <h1>No hay exámenes disponibles para este estudiante.</h1>
       </div>
     );
   }
@@ -50,8 +78,8 @@ const ExamByStudentById = () => {
         <ArrowLeft />
       </Button>
 
-      <h1 className="mb-4 text-primary">Exámenes de {student.name}</h1>
-      {student.exams && student.exams.length > 0 ? (
+      <h1 className="mb-4 text-primary">Exámenes de {studentId}</h1>
+      {examListData.length > 0 ? (
         <>
           <Table className="bg-white dark:bg-gray-400 rounded-xl">
             <TableHeader>
@@ -64,18 +92,22 @@ const ExamByStudentById = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {student.exams.map((exam) => (
-                <TableRow key={exam.id}>
+              {examListData.map((exam) => (
+                <TableRow key={exam.examen_id}>
                   <TableCell>
                     <input
                       type="checkbox"
-                      checked={selectedExams.includes(exam.id.toString())}
-                      onChange={() => handleSelectExam(exam.id.toString())}
+                      checked={selectedExams.includes(
+                        exam.examen_id.toString()
+                      )}
+                      onChange={() =>
+                        handleSelectExam(exam.examen_id.toString())
+                      }
                       className="w-4 h-4"
                     />
                   </TableCell>
-                  <TableCell>{exam.name}</TableCell>
-                  <TableCell>{exam.date}</TableCell>
+                  <TableCell>{exam.descripcion}</TableCell>
+                  <TableCell>{formatDateToString(exam.fecha)}</TableCell>
                   <TableCell>{exam.puntos}</TableCell>
                   <TableCell>
                     <Button variant="outline">

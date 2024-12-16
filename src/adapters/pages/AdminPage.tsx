@@ -4,15 +4,22 @@ import { AttendanceChart } from "@/components/admin/AttendanceChart";
 import { CountChart } from "@/components/admin/CountChart";
 import FinanceChart from "../../components/admin/FinanceChart";
 import UserCard from "../../components/admin/UserCard";
+import { useDashboardData } from "@/hooks/useStudentInfo";
 
 const AdminPage = () => {
+  const { dashboardData, loading } = useDashboardData();
+
   return (
     <div className="flex flex-col gap-4 p-4 md:flex-row ">
       {/* LEFT */}
       <div className="flex flex-col w-full gap-8 lg:w-2/3">
         {/* USER CARDS */}
         <div className="flex flex-wrap justify-between gap-4">
-          <UserCard type="Estudiantes" count={0} />
+          <UserCard
+            type="Estudiantes"
+            count={dashboardData?.total_estudiantes || null}
+            loading={loading}
+          />
           <UserCard type="Examenes" count={0} />
         </div>
         {/* MIDDLE CHARTS */}

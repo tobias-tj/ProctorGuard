@@ -1,7 +1,5 @@
 import { Student } from "@/types/Student";
-import { Eye, Trash, Filter, ListOrdered } from "lucide-react";
-import FormModal from "@/components/list/FormModal";
-import { studentsData } from "@/lib/data";
+import { Eye, Filter, ListOrdered } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -21,24 +19,24 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { useStudentListData } from "@/hooks/useStudentInfo";
 
 const columns = [
   {
     header: "Nombre Completo",
-    accessor: "info",
+    accessor: "nombre",
     className: "hidden md:table-cell",
   },
   {
     header: "CI",
-    accessor: "studentId",
+    accessor: "ci",
     className: "hidden md:table-cell",
   },
   {
     header: "Correo",
-    accessor: "email",
+    accessor: "correo",
     className: "hidden md:table-cell",
   },
-
   {
     header: "Acciones",
     accessor: "action",
@@ -46,43 +44,64 @@ const columns = [
 ];
 
 const StudentListPage = () => {
+  const { studentListData, loading, error } = useStudentListData();
+
+  // Renderizar fila de cada estudiante
   const renderRow = (item: Student) => (
-    <TableRow
-      key={item.studentId}
-      className="text-sm border-b border-gray-200 "
-    >
+    <TableRow key={item.ci} className="text-sm border-b border-gray-200">
       <TableCell>
         <div className="flex items-center gap-4">
           <div className="flex flex-col">
             <h3 className="font-semibold text-black dark:text-white">
-              {item.name}
+              {item.nombre}
             </h3>
           </div>
         </div>
       </TableCell>
-      <TableCell className="hidden md:table-cell">{item.studentId}</TableCell>
-      <TableCell className="hidden md:table-cell">{item.email}</TableCell>
+      <TableCell className="hidden md:table-cell">{item.ci}</TableCell>
+      <TableCell className="hidden md:table-cell">{item.correo}</TableCell>
       <TableCell>
         <div className="flex items-center gap-2">
-          <Link to={`/list/exams/${item.studentId}`}>
+          <Link to={`/list/exams/${item.ci}`}>
             <Button variant="outline" className="p-2 rounded-full">
               <Eye size={16} />
             </Button>
           </Link>
-          <FormModal
-            table="student"
-            type="delete"
-            id={Number(item.studentId)}
-            trigger={
-              <Button variant="outline" className="p-2 rounded-full">
-                <Trash size={16} />
-              </Button>
-            }
-          />
         </div>
       </TableCell>
     </TableRow>
   );
+
+  // Manejar casos especiales (loading, error, lista vacía)
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <p className="text-lg font-semibold text-primary">
+          Cargando estudiantes...
+        </p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <p className="text-lg font-semibold text-red-500">
+          Ocurrió un error al cargar los estudiantes: {error}
+        </p>
+      </div>
+    );
+  }
+
+  if (!studentListData || studentListData.length === 0) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <p className="text-lg font-semibold text-gray-500">
+          No hay estudiantes disponibles.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="flex-1 w-full min-h-screen p-4 shadow-lg bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 lg:w-[900px] sm:w-[400px]">
@@ -92,7 +111,7 @@ const StudentListPage = () => {
           Todos los estudiantes
         </h1>
         <div className="flex flex-col items-center w-full gap-4 md:flex-row md:w-auto">
-          <Input placeholder="Search..." className="w-full md:w-64" />
+          <Input placeholder="Buscar..." className="w-full md:w-64" />
           <div className="flex items-center gap-4">
             <Button variant="outline" className="p-2 rounded-full">
               <Filter size={14} />
@@ -114,7 +133,7 @@ const StudentListPage = () => {
             ))}
           </TableRow>
         </TableHeader>
-        <TableBody>{studentsData.map(renderRow)}</TableBody>
+        <TableBody>{studentListData.map(renderRow)}</TableBody>
       </Table>
       {/* PAGINATION */}
       <Pagination>
