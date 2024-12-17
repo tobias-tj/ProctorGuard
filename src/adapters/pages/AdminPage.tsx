@@ -5,9 +5,11 @@ import { CountChart } from "@/components/admin/CountChart";
 import FinanceChart from "../../components/admin/FinanceChart";
 import UserCard from "../../components/admin/UserCard";
 import { useDashboardData } from "@/hooks/useStudentInfo";
+import { useExamTotalCount } from "@/hooks/useExamInfo";
 
 const AdminPage = () => {
   const { dashboardData, loading } = useDashboardData();
+  const { examTotalCount, loadingExam } = useExamTotalCount();
 
   return (
     <div className="flex flex-col gap-4 p-4 md:flex-row ">
@@ -20,7 +22,11 @@ const AdminPage = () => {
             count={dashboardData?.total_estudiantes || null}
             loading={loading}
           />
-          <UserCard type="Examenes" count={0} />
+          <UserCard
+            type="Examenes"
+            count={examTotalCount || null}
+            loading={loadingExam}
+          />
         </div>
         {/* MIDDLE CHARTS */}
         <div className="flex flex-col gap-4 lg:flex-row">

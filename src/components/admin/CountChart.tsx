@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Settings } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -10,11 +10,7 @@ import {
 import { PieChart, Pie, Cell, ResponsiveContainer, Sector } from "recharts";
 import { Button } from "../ui/button";
 import { useDashboardData } from "@/hooks/useStudentInfo";
-
-const examData = [
-  { name: "Examenes Correctos", value: 1634, color: "hsl(var(--chart-2))" },
-  { name: "Examenes Incidentes", value: 1234, color: "hsl(var(--chart-1))" },
-];
+import { useExamCleanCount, useExamIncidentCount } from "@/hooks/useExamInfo";
 
 const renderActiveShape = (props: any) => {
   const { cx, cy, innerRadius, outerRadius, startAngle, endAngle, fill } =
@@ -36,13 +32,26 @@ const renderActiveShape = (props: any) => {
 
 export function CountChart() {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
-  const [currentData, setCurrentData] = useState(examData);
+  const [currentData, setCurrentData] = useState<any[]>([
+    { name: "Correctos", value: 0, color: "hsl(var(--chart-2))" },
+    { name: "Incidentes", value: 0, color: "hsl(var(--chart-1))" },
+  ]);
   const [title, setTitle] = useState("Total de Exámenes");
 
   const { dashboardData } = useDashboardData();
+  const { examCleanCount } = useExamCleanCount();
+  const { examIncidentCount } = useExamIncidentCount();
 
-  // Datos dinámicos para estudiantes
+  // Actualizar los datos de exámenes
+  const examData = getNewExamData(examCleanCount, examIncidentCount);
+
+  // Actualizar los datos de estudiantes
   const studentData = getNewStudentData(dashboardData);
+
+  useEffect(() => {
+    // Seteamos los datos iniciales con exámenes
+    setCurrentData(examData);
+  }, [examCleanCount, examIncidentCount]);
 
   const onPieEnter = (_: any, index: number) => {
     setActiveIndex(index);
@@ -155,14 +164,32 @@ function getNewStudentData(
     ? [
         {
           name: "Estudiantes Correctos",
-          value: dashboardData.total_estudiantes_sin_incidencias,
+          value: dashboardData.total_estudiantes_sin_incidencias || 0,
           color: "hsl(var(--chart-2))",
         },
         {
           name: "Estudiantes Incidentes",
-          value: dashboardData.total_estudiantes_con_incidencias,
+          value: dashboardData.total_estudiantes_con_incidencias || 0,
           color: "hsl(var(--chart-1))",
         },
       ]
-    : [];
+    : [
+        { name: "Correctos", value: 0, color: "hsl(var(--chart-2))" },
+        { name: "Incidentes", value: 0, color: "hsl(var(--chart-1))" },
+      ];
+}
+
+function getNewExamData(cleanCount: number, incidentCount: number) {
+  return [
+    {
+      name: "Exámenes Correctos",
+      value: cleanCount || 0,
+      color: "hsl(var(--chart-2))",
+    },
+    {
+      name: "Exámenes Incidentes",
+      value: incidentCount || 0,
+      color: "hsl(var(--chart-1))",
+    },
+  ];
 }
