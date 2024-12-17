@@ -44,11 +44,6 @@ const projects = [
     icon: Megaphone,
     name: "Avisos",
   },
-  {
-    url: "/events",
-    icon: CalendarRange,
-    name: "Eventos",
-  },
 ];
 
 // Menu Config

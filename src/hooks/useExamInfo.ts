@@ -3,6 +3,10 @@ import {
   fetchDashboardExamIncidentCount,
   fetchDashboardExamTotalCount,
 } from "@/api/admin/dashboardAdmin";
+import { fetchExamListData } from "@/api/tableExam/getListExams";
+import { fetchListStudentByExamId } from "@/api/tableExam/getListStudentByExamId";
+import { ExamTable } from "@/types/ExamTable";
+import { StudentByExamId } from "@/types/StudentByExamId";
 import { useEffect, useState } from "react";
 
 export const useExamTotalCount = () => {
@@ -77,4 +81,54 @@ export const useExamIncidentCount = () => {
   }, []);
 
   return { examIncidentCount, loadingExam, error };
+};
+
+export const useExamListData = () => {
+  const [examListData, setExamListData] = useState<ExamTable[] | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const data = await fetchExamListData();
+        setExamListData(data);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Unexpected error");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
+  return { examListData, loading, error };
+};
+
+export const useListStudentsByExamId = (examId: number) => {
+  const [studentListDataByExam, setStudentListDataByExam] = useState<
+    StudentByExamId[] | null
+  >(null);
+
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        console.log(examId);
+        const data = await fetchListStudentByExamId(examId);
+        setStudentListDataByExam(data);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Unexpected error");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, [examId]);
+
+  return { studentListDataByExam, loading, error };
 };

@@ -35,16 +35,6 @@ const UserCard: React.FC<UserCardProps> = ({
       <CardFooter className="absolute bottom-0 left-0 right-0 justify-center pb-4">
         <p className="text-xl text-gray-500 text-muted-foreground">{type}</p>
       </CardFooter>
-
-      {/* Botón de configuración */}
-      <Button
-        variant="ghost"
-        size="icon"
-        className="absolute top-2 right-2 h-[30px]"
-        onClick={() => console.log("Configuración")}
-      >
-        <Settings className="w-5 h-5" />
-      </Button>
     </Card>
   );
 };

@@ -5,7 +5,6 @@ import Navbar from "@/components/dashboard/Navbar";
 import StudentListPage from "../pages/StudentListPage";
 import ExamListPage from "../pages/ExamListPage";
 import AnnouncementPage from "../pages/AnnouncementPage";
-import EventPage from "../pages/EventPage";
 import AccountPage from "../pages/AccountPage";
 import HelpPage from "../pages/HelpPage";
 import ClosePage from "../pages/ClosePage";
@@ -49,15 +48,6 @@ function AppRoutes() {
             <DashboardLayout>
               <Navbar title="Avisos" />
               <AnnouncementPage />
-            </DashboardLayout>
-          }
-        />
-        <Route
-          path="/events"
-          element={
-            <DashboardLayout>
-              <Navbar title="Eventos" />
-              <EventPage />
             </DashboardLayout>
           }
         />

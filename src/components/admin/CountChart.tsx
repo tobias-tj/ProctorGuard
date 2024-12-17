@@ -43,7 +43,7 @@ export function CountChart() {
   const { examIncidentCount } = useExamIncidentCount();
 
   // Actualizar los datos de exámenes
-  const examData = getNewExamData(examCleanCount, examIncidentCount);
+  const examData = getNewExamData(examCleanCount || 0, examIncidentCount || 0);
 
   // Actualizar los datos de estudiantes
   const studentData = getNewStudentData(dashboardData);

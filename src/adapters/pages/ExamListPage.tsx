@@ -1,6 +1,4 @@
-import { Exam } from "@/types/Exam";
 import { Eye, Filter, ListOrdered } from "lucide-react";
-import { examsData } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -20,6 +18,9 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { useExamListData } from "@/hooks/useExamInfo";
+import { ExamTable } from "@/types/ExamTable";
+import formatDateToString from "@/utils/formatDateToString";
 
 const columns = [
   {
@@ -38,18 +39,15 @@ const columns = [
     className: "hidden md:table-cell",
   },
   {
-    header: "Recibidos",
-    accessor: "received",
-    className: "hidden lg:table-cell",
-  },
-  {
     header: "Acciones",
     accessor: "action",
   },
 ];
 
 const ExamListPage = () => {
-  const renderRow = (item: Exam) => (
+  const { examListData, loading, error } = useExamListData();
+
+  const renderRow = (item: ExamTable) => (
     <TableRow key={item.id} className="text-sm border-b border-gray-200 ">
       <TableCell>
         <div className="flex items-center gap-4">
@@ -60,9 +58,10 @@ const ExamListPage = () => {
           </div>
         </div>
       </TableCell>
-      <TableCell className="hidden md:table-cell">{item.name}</TableCell>
-      <TableCell className="hidden md:table-cell">{item.date}</TableCell>
-      <TableCell className="hidden md:table-cell">{item.received}</TableCell>
+      <TableCell className="hidden md:table-cell">{item.descripcion}</TableCell>
+      <TableCell className="hidden md:table-cell">
+        {formatDateToString(item.fecha)}
+      </TableCell>
       <TableCell>
         <div className="flex items-center gap-2">
           <Link to={`/list/students/${item.id}`}>
@@ -74,6 +73,38 @@ const ExamListPage = () => {
       </TableCell>
     </TableRow>
   );
+
+  // Manejar casos especiales (loading, error, lista vacía)
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <p className="text-lg font-semibold text-primary">
+          Cargando examenes...
+        </p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <p className="text-lg font-semibold text-red-500">
+          Ocurrió un error al cargar los estudiantes: {error}
+        </p>
+      </div>
+    );
+  }
+
+  if (!examListData || examListData.length === 0) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <p className="text-lg font-semibold text-gray-500">
+          No hay estudiantes disponibles.
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div className="flex-1 lg:w-[900px] sm:w-[400px] w-full min-h-screen p-4 shadow-lg bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
       {/* TOP */}
@@ -104,7 +135,7 @@ const ExamListPage = () => {
             ))}
           </TableRow>
         </TableHeader>
-        <TableBody>{examsData.map(renderRow)}</TableBody>
+        <TableBody>{examListData.map(renderRow)}</TableBody>
       </Table>
       {/* PAGINATION */}
       <Pagination>
