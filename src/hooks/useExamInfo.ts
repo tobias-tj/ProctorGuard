@@ -1,8 +1,4 @@
-import {
-  fetchDashboardExamCleanCount,
-  fetchDashboardExamIncidentCount,
-  fetchDashboardExamTotalCount,
-} from "@/api/admin/dashboardAdmin";
+import { fetchDashboardExamTotalCount } from "@/api/admin/dashboardAdmin";
 import { fetchExamListData } from "@/api/tableExam/getListExams";
 import { fetchListStudentByExamId } from "@/api/tableExam/getListStudentByExamId";
 import { ExamTable } from "@/types/ExamTable";
@@ -10,7 +6,11 @@ import { StudentByExamId } from "@/types/StudentByExamId";
 import { useEffect, useState } from "react";
 
 export const useExamTotalCount = () => {
-  const [examTotalCount, setExamTotalCount] = useState<number | null>(null);
+  const [examTotalData, setExamTotalData] = useState<{
+    total_examenes: number;
+    total_examenes_con_incidencias: number;
+    total_examenes_sin_incidencias: number;
+  } | null>(null);
   const [loadingExam, setLoadingExam] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -19,7 +19,15 @@ export const useExamTotalCount = () => {
       try {
         setLoadingExam(true);
         const data = await fetchDashboardExamTotalCount();
-        setExamTotalCount(Number(data.count));
+        setExamTotalData({
+          total_examenes: Number(data.total_examenes),
+          total_examenes_con_incidencias: Number(
+            data.total_examenes_con_incidencias
+          ),
+          total_examenes_sin_incidencias: Number(
+            data.total_examenes_sin_incidencias
+          ),
+        });
       } catch (err) {
         setError(err instanceof Error ? err.message : "Unexpected error");
       } finally {
@@ -30,58 +38,58 @@ export const useExamTotalCount = () => {
     fetchData();
   }, []);
 
-  return { examTotalCount, loadingExam, error };
+  return { examTotalData, loadingExam, error };
 };
 
-export const useExamCleanCount = () => {
-  const [examCleanCount, setExamCleanCount] = useState<number | null>(null);
-  const [loadingExam, setLoadingExam] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+// export const useExamCleanCount = () => {
+//   const [examCleanCount, setExamCleanCount] = useState<number | null>(null);
+//   const [loadingExam, setLoadingExam] = useState<boolean>(true);
+//   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoadingExam(true);
-        const data = await fetchDashboardExamCleanCount();
-        setExamCleanCount(Number(data.count));
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "Unexpected error");
-      } finally {
-        setLoadingExam(false);
-      }
-    };
+//   useEffect(() => {
+//     const fetchData = async () => {
+//       try {
+//         setLoadingExam(true);
+//         const data = await fetchDashboardExamCleanCount();
+//         setExamCleanCount(Number(data.count));
+//       } catch (err) {
+//         setError(err instanceof Error ? err.message : "Unexpected error");
+//       } finally {
+//         setLoadingExam(false);
+//       }
+//     };
 
-    fetchData();
-  }, []);
+//     fetchData();
+//   }, []);
 
-  return { examCleanCount, loadingExam, error };
-};
+//   return { examCleanCount, loadingExam, error };
+// };
 
-export const useExamIncidentCount = () => {
-  const [examIncidentCount, setExamIncidentCount] = useState<number | null>(
-    null
-  );
-  const [loadingExam, setLoadingExam] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+// export const useExamIncidentCount = () => {
+//   const [examIncidentCount, setExamIncidentCount] = useState<number | null>(
+//     null
+//   );
+//   const [loadingExam, setLoadingExam] = useState<boolean>(true);
+//   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoadingExam(true);
-        const data = await fetchDashboardExamIncidentCount();
-        setExamIncidentCount(Number(data.count));
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "Unexpected error");
-      } finally {
-        setLoadingExam(false);
-      }
-    };
+//   useEffect(() => {
+//     const fetchData = async () => {
+//       try {
+//         setLoadingExam(true);
+//         const data = await fetchDashboardExamIncidentCount();
+//         setExamIncidentCount(Number(data.count));
+//       } catch (err) {
+//         setError(err instanceof Error ? err.message : "Unexpected error");
+//       } finally {
+//         setLoadingExam(false);
+//       }
+//     };
 
-    fetchData();
-  }, []);
+//     fetchData();
+//   }, []);
 
-  return { examIncidentCount, loadingExam, error };
-};
+//   return { examIncidentCount, loadingExam, error };
+// };
 
 export const useExamListData = () => {
   const [examListData, setExamListData] = useState<ExamTable[] | null>(null);

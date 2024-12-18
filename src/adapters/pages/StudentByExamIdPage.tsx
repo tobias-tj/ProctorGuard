@@ -114,7 +114,7 @@ const StudentByExamId = () => {
                   <TableCell>{student.nombre}</TableCell>
                   <TableCell>{student.id}</TableCell>
                   <TableCell>{formatDateToString(student.fecha)}</TableCell>
-                  <TableCell>{student.puntos}</TableCell>
+                  <TableCell>{100 - Number(student.puntos)}</TableCell>
                   <TableCell>
                     <Button variant="outline">
                       <Download />

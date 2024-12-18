@@ -10,7 +10,7 @@ import {
 import { PieChart, Pie, Cell, ResponsiveContainer, Sector } from "recharts";
 import { Button } from "../ui/button";
 import { useDashboardData } from "@/hooks/useStudentInfo";
-import { useExamCleanCount, useExamIncidentCount } from "@/hooks/useExamInfo";
+import { useExamTotalCount } from "@/hooks/useExamInfo";
 
 const renderActiveShape = (props: any) => {
   const { cx, cy, innerRadius, outerRadius, startAngle, endAngle, fill } =
@@ -39,11 +39,10 @@ export function CountChart() {
   const [title, setTitle] = useState("Total de Exámenes");
 
   const { dashboardData } = useDashboardData();
-  const { examCleanCount } = useExamCleanCount();
-  const { examIncidentCount } = useExamIncidentCount();
+  const { examTotalData } = useExamTotalCount();
 
   // Actualizar los datos de exámenes
-  const examData = getNewExamData(examCleanCount || 0, examIncidentCount || 0);
+  const examData = getNewExamData(examTotalData);
 
   // Actualizar los datos de estudiantes
   const studentData = getNewStudentData(dashboardData);
@@ -51,7 +50,7 @@ export function CountChart() {
   useEffect(() => {
     // Seteamos los datos iniciales con exámenes
     setCurrentData(examData);
-  }, [examCleanCount, examIncidentCount]);
+  }, [examTotalData]);
 
   const onPieEnter = (_: any, index: number) => {
     setActiveIndex(index);
@@ -179,17 +178,28 @@ function getNewStudentData(
       ];
 }
 
-function getNewExamData(cleanCount: number, incidentCount: number) {
-  return [
-    {
-      name: "Exámenes Correctos",
-      value: cleanCount || 0,
-      color: "hsl(var(--chart-2))",
-    },
-    {
-      name: "Exámenes Incidentes",
-      value: incidentCount || 0,
-      color: "hsl(var(--chart-1))",
-    },
-  ];
+function getNewExamData(
+  examTotalData: {
+    total_examenes: number;
+    total_examenes_con_incidencias: number;
+    total_examenes_sin_incidencias: number;
+  } | null
+) {
+  return examTotalData
+    ? [
+        {
+          name: "Exámenes Correctos",
+          value: examTotalData.total_examenes_sin_incidencias || 0,
+          color: "hsl(var(--chart-2))",
+        },
+        {
+          name: "Exámenes Incidentes",
+          value: examTotalData.total_examenes_con_incidencias || 0,
+          color: "hsl(var(--chart-1))",
+        },
+      ]
+    : [
+        { name: "Correctos", value: 0, color: "hsl(var(--chart-2))" },
+        { name: "Incidentes", value: 0, color: "hsl(var(--chart-1))" },
+      ];
 }

@@ -9,7 +9,7 @@ import { useExamTotalCount } from "@/hooks/useExamInfo";
 
 const AdminPage = () => {
   const { dashboardData, loading } = useDashboardData();
-  const { examTotalCount, loadingExam } = useExamTotalCount();
+  const { examTotalData, loadingExam } = useExamTotalCount();
 
   return (
     <div className="flex flex-col gap-4 p-4 md:flex-row ">
@@ -24,7 +24,7 @@ const AdminPage = () => {
           />
           <UserCard
             type="Examenes"
-            count={examTotalCount || null}
+            count={examTotalData?.total_examenes || null}
             loading={loadingExam}
           />
         </div>

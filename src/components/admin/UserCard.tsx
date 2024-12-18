@@ -1,6 +1,4 @@
-import { Settings } from "lucide-react";
 import { Card, CardContent, CardFooter } from "../ui/card";
-import { Button } from "../ui/button";
 import { Skeleton } from "../ui/skeleton";
 
 interface UserCardProps {
