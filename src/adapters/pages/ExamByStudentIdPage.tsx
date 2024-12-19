@@ -11,6 +11,7 @@ import { ArrowLeft, Download } from "lucide-react";
 import { useState } from "react";
 import { useListExamByStudentId } from "@/hooks/useStudentInfo";
 import formatDateToString from "@/utils/formatDateToString";
+import LevelIndicator from "@/components/admin/LevelIndicator";
 
 const ExamByStudentById = () => {
   const { studentId } = useParams<{
@@ -56,7 +57,11 @@ const ExamByStudentById = () => {
   // Si ocurre un error, muestra el mensaje correspondiente
   if (error) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
+      <div className="flex-1 w-full min-h-screen p-4 shadow-lg bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 lg:w-[900px] sm:w-[400px]">
+        {/* Botón de retroceso */}
+        <Button variant="outline" className="mb-4" onClick={() => navigate(-1)}>
+          <ArrowLeft />
+        </Button>
         <h1 className="text-red-500">Ocurrió un error: {error}</h1>
       </div>
     );
@@ -65,7 +70,11 @@ const ExamByStudentById = () => {
   // Si no hay datos disponibles
   if (!examListData || examListData.length === 0) {
     return (
-      <div className="flex items-center justify-center p-4">
+      <div className="flex-1 w-full min-h-screen p-4 shadow-lg bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 lg:w-[900px] sm:w-[400px]">
+        {/* Botón de retroceso */}
+        <Button variant="outline" className="mb-4" onClick={() => navigate(-1)}>
+          <ArrowLeft />
+        </Button>
         <h1>No hay exámenes disponibles para este estudiante.</h1>
       </div>
     );
@@ -88,6 +97,7 @@ const ExamByStudentById = () => {
                 <TableCell>Nombre del Examen</TableCell>
                 <TableCell>Fecha</TableCell>
                 <TableCell>Puntos</TableCell>
+                <TableCell>Nivel</TableCell>
                 <TableCell>Acciones</TableCell>
               </TableRow>
             </TableHeader>
@@ -109,6 +119,9 @@ const ExamByStudentById = () => {
                   <TableCell>{exam.descripcion}</TableCell>
                   <TableCell>{formatDateToString(exam.fecha)}</TableCell>
                   <TableCell>{100 - Number(exam.puntos)}</TableCell>
+                  <TableCell>
+                    <LevelIndicator points={100 - Number(exam.puntos)} />
+                  </TableCell>
                   <TableCell>
                     <Button variant="outline">
                       <Download />

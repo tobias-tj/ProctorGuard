@@ -11,6 +11,7 @@ import { ArrowLeft, Download } from "lucide-react";
 import { useState } from "react";
 import { useListStudentsByExamId } from "@/hooks/useExamInfo";
 import formatDateToString from "@/utils/formatDateToString";
+import LevelIndicator from "@/components/admin/LevelIndicator";
 
 const StudentByExamId = () => {
   const { examId } = useParams<{ examId: string }>();
@@ -70,7 +71,11 @@ const StudentByExamId = () => {
 
   if (!studentListDataByExam || studentListDataByExam.length === 0) {
     return (
-      <div className="flex items-center justify-center p-4">
+      <div className="flex-1 w-full min-h-screen p-4 shadow-lg bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 lg:w-[900px] sm:w-[400px]">
+        {/* Botón de retroceso */}
+        <Button variant="outline" className="mb-4" onClick={() => navigate(-1)}>
+          <ArrowLeft />
+        </Button>
         <h1>No hay incidentes reportados para este examen.</h1>
       </div>
     );
@@ -96,6 +101,7 @@ const StudentByExamId = () => {
                 <TableCell>CI</TableCell>
                 <TableCell>Fecha</TableCell>
                 <TableCell>Puntos</TableCell>
+                <TableCell>Nivel</TableCell>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -115,6 +121,10 @@ const StudentByExamId = () => {
                   <TableCell>{student.id}</TableCell>
                   <TableCell>{formatDateToString(student.fecha)}</TableCell>
                   <TableCell>{100 - Number(student.puntos)}</TableCell>
+                  <TableCell>
+                    {" "}
+                    <LevelIndicator points={100 - Number(student.puntos)} />
+                  </TableCell>
                   <TableCell>
                     <Button variant="outline">
                       <Download />
