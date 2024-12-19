@@ -37,9 +37,12 @@ export function CountChart() {
     { name: "Incidentes", value: 0, color: "hsl(var(--chart-1))" },
   ]);
   const [title, setTitle] = useState("Total de Exámenes");
+  const [isExamMode, setIsExamMode] = useState(true);
 
   const { dashboardData } = useDashboardData();
   const { examTotalData } = useExamTotalCount();
+
+  console.log("Lo que viene de info count --> ", dashboardData);
 
   // Actualizar los datos de exámenes
   const examData = getNewExamData(examTotalData);
@@ -60,7 +63,10 @@ export function CountChart() {
     setActiveIndex(null);
   };
 
-  const total = currentData.reduce((sum, item) => sum + item.value, 0);
+  // Determinar el total en función del modo actual
+  const total = isExamMode
+    ? examTotalData?.total_examenes || 0
+    : dashboardData?.total_estudiantes || 0;
 
   return (
     <Card className="w-full h-full shadow-lg bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
@@ -79,6 +85,7 @@ export function CountChart() {
               onClick={() => {
                 setCurrentData(examData);
                 setTitle("Total de Exámenes");
+                setIsExamMode(true);
               }}
             >
               Mostrar Exámenes
@@ -87,6 +94,7 @@ export function CountChart() {
               onClick={() => {
                 setCurrentData(studentData);
                 setTitle("Total de Estudiantes");
+                setIsExamMode(false);
               }}
             >
               Mostrar Estudiantes
