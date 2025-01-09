@@ -1,4 +1,5 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { useState } from "react";
 import AdminPage from "../pages/AdminPage";
 import DashboardLayout from "@/layouts/Dashboard";
 import Navbar from "@/components/dashboard/Navbar";
@@ -10,90 +11,149 @@ import HelpPage from "../pages/HelpPage";
 import ClosePage from "../pages/ClosePage";
 import ExamByStudentById from "../pages/ExamByStudentIdPage";
 import StudentByExamId from "../pages/StudentByExamIdPage";
+import LoginForm from "@/LoginForm";
+
 
 function AppRoutes() {
+  const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem("isLoggedIn") === "true");
+
+  const handleLogin = () => {
+    localStorage.setItem("isLoggedIn", "true");
+    setIsLoggedIn(true);
+  };
+
+  /*const handleLogout = () => {
+    localStorage.removeItem("isLoggedIn");
+    setIsLoggedIn(false);
+  };*/
+
   return (
     <Router>
       <Routes>
+        {/* Ruta de inicio de sesión */}
         <Route
           path="/"
           element={
-            <DashboardLayout>
-              <Navbar title="Dashboard" />
-              <AdminPage />
-            </DashboardLayout>
+            isLoggedIn ? <Navigate to="/dashboard" /> : <LoginForm onLogin={handleLogin} />
+          }
+        />
+
+        {/* Rutas protegidas dentro del dashboard */}
+        <Route
+          path="/dashboard"
+          element={
+            isLoggedIn ? (
+              <DashboardLayout>
+                <Navbar title="Dashboard" />
+                <AdminPage />
+              </DashboardLayout>
+            ) : (
+              <Navigate to="/" />
+            )
           }
         />
         <Route
           path="/list/students"
           element={
-            <DashboardLayout>
-              <Navbar title="Estudiantes" />
-              <StudentListPage />
-            </DashboardLayout>
+            isLoggedIn ? (
+              <DashboardLayout>
+                <Navbar title="Estudiantes" />
+                <StudentListPage />
+              </DashboardLayout>
+            ) : (
+              <Navigate to="/" />
+            )
           }
         />
         <Route
           path="/list/exams"
           element={
-            <DashboardLayout>
-              <Navbar title="Examenes" />
-              <ExamListPage />
-            </DashboardLayout>
+            isLoggedIn ? (
+              <DashboardLayout>
+                <Navbar title="Exámenes" />
+                <ExamListPage />
+              </DashboardLayout>
+            ) : (
+              <Navigate to="/" />
+            )
           }
         />
         <Route
           path="/announcement"
           element={
-            <DashboardLayout>
-              <Navbar title="Avisos" />
-              <AnnouncementPage />
-            </DashboardLayout>
+            isLoggedIn ? (
+              <DashboardLayout>
+                <Navbar title="Avisos" />
+                <AnnouncementPage />
+              </DashboardLayout>
+            ) : (
+              <Navigate to="/" />
+            )
           }
         />
         <Route
           path="/account"
           element={
-            <DashboardLayout>
-              <Navbar title="Cuenta" />
-              <AccountPage />
-            </DashboardLayout>
+            isLoggedIn ? (
+              <DashboardLayout>
+                <Navbar title="Cuenta" />
+                <AccountPage />
+              </DashboardLayout>
+            ) : (
+              <Navigate to="/" />
+            )
           }
         />
         <Route
           path="/help"
           element={
-            <DashboardLayout>
-              <Navbar title="Ayuda" />
-              <HelpPage />
-            </DashboardLayout>
+            isLoggedIn ? (
+              <DashboardLayout>
+                <Navbar title="Ayuda" />
+                <HelpPage />
+              </DashboardLayout>
+            ) : (
+              <Navigate to="/" />
+            )
           }
         />
         <Route
           path="/close"
           element={
-            <DashboardLayout>
-              <Navbar title="" />
-              <ClosePage />
-            </DashboardLayout>
+            isLoggedIn ? (
+              <DashboardLayout>
+                <Navbar title="" />
+                <ClosePage />
+              </DashboardLayout>
+            ) : (
+              <Navigate to="/" />
+            )
           }
         />
         <Route
           path="/list/exams/:studentId"
           element={
-            <DashboardLayout>
-              <Navbar title="" />
-              <ExamByStudentById />
-            </DashboardLayout>
+            isLoggedIn ? (
+              <DashboardLayout>
+                <Navbar title="" />
+                <ExamByStudentById />
+              </DashboardLayout>
+            ) : (
+              <Navigate to="/" />
+            )
           }
         />
         <Route
           path="/list/students/:examId"
           element={
-            <DashboardLayout>
-              <Navbar title="" />
-              <StudentByExamId />
-            </DashboardLayout>
+            isLoggedIn ? (
+              <DashboardLayout>
+                <Navbar title="" />
+                <StudentByExamId />
+              </DashboardLayout>
+            ) : (
+              <Navigate to="/" />
+            )
           }
         />
       </Routes>

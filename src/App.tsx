@@ -4,9 +4,7 @@ import { ThemeProvider } from "./theme-provider";
 const App: React.FC = () => {
   return (
     <ThemeProvider>
-      <div>
-        <AppRoutes />
-      </div>
+     <div> <AppRoutes ></AppRoutes></div>
     </ThemeProvider>
   );
 };
