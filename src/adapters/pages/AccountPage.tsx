@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -12,36 +13,54 @@ import {
 } from "@/components/ui/dialog";
 
 const AccountPage = () => {
+  const navigate = useNavigate();
   const [isEditable, setIsEditable] = useState(false);
   const [isChanged, setIsChanged] = useState(false);
   const [profilePicture, setProfilePicture] = useState<string | null>(null);
   const [showPasswordDialog, setShowPasswordDialog] = useState(false);
+
+  // Estado inicial del usuario
   const [userData, setUserData] = useState({
-    university: "Universidad Nacional de Asunción",
-    fullName: "Tobias Jara",
-    idCard: "1234567",
-    email: "tobias.jara@example.com",
-    phone: "+595 123 456 789",
-    address: "Fernando de la Mora, Central, Paraguay",
+    university: "",
+    fullName: "",
+    idCard: "",
+    email: "",
+    phone: "",
+    address: "",
   });
 
   const [formData, setFormData] = useState(userData);
 
-  // Detectar cambios
+  // Cargar usuario del localStorage al montar el componente
+  useEffect(() => {
+    const user = localStorage.getItem("user");
+    if (user) {
+      const parsedUser = JSON.parse(user);
+      setUserData(parsedUser);
+      setFormData(parsedUser);
+    } else {
+      // Si no hay usuario autenticado, redirigir al login
+      navigate("/");
+    }
+  }, [navigate]);
+
+  // Detectar cambios en los inputs
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
-    setIsChanged(true); // Detecta cambios
+    setIsChanged(true);
   };
 
-  // Guardar todo
+  // Guardar todos los cambios
   const saveAllChanges = () => {
     setUserData(formData);
     setIsChanged(false);
     setIsEditable(false);
+    // Actualizar usuario en localStorage
+    localStorage.setItem("user", JSON.stringify(formData));
   };
 
   // Cambiar foto de perfil
@@ -68,7 +87,12 @@ const AccountPage = () => {
               {profilePicture ? (
                 <AvatarImage src={profilePicture} alt="Foto de perfil" />
               ) : (
-                <AvatarFallback>TJ</AvatarFallback>
+                <AvatarFallback>
+                  {userData.fullName
+                    .split(" ")
+                    .map((name) => name.charAt(0))
+                    .join("")}
+                </AvatarFallback>
               )}
             </Avatar>
             <div>
@@ -138,7 +162,6 @@ const AccountPage = () => {
             </div>
           </div>
           <div className="flex space-x-4">
-            {/* Botón de Editar */}
             <Button
               variant="default"
               onClick={() => setIsEditable(true)}
@@ -146,8 +169,6 @@ const AccountPage = () => {
             >
               Editar
             </Button>
-
-            {/* Botón de Guardar Todo */}
             <Button
               variant="default"
               onClick={saveAllChanges}
@@ -159,7 +180,6 @@ const AccountPage = () => {
         </CardContent>
       </Card>
 
-      {/* Modal para cambiar contraseña */}
       <Dialog open={showPasswordDialog} onOpenChange={setShowPasswordDialog}>
         <DialogContent>
           <DialogHeader>
