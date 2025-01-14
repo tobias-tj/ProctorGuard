@@ -19,15 +19,19 @@ export const useExamTotalCount = () => {
       try {
         setLoadingExam(true);
         const data = await fetchDashboardExamTotalCount();
-        setExamTotalData({
+        //VERIFICAR POrque me traeun dato negativo.
+        const temp = {
           total_examenes: Number(data.total_examenes),
-          total_examenes_con_incidencias: Number(
-            data.total_examenes_con_incidencias
-          ),
-          total_examenes_sin_incidencias: Number(
-            data.total_examenes_sin_incidencias
-          ),
-        });
+          total_examenes_con_incidencias:
+            Number(data.total_examenes_con_incidencias) > 0
+              ? Number(data.total_examenes_con_incidencias)
+              : 0,
+          total_examenes_sin_incidencias:
+            Number(data.total_examenes_sin_incidencias) > 0
+              ? Number(data.total_examenes_sin_incidencias)
+              : 0,
+        };
+        setExamTotalData(temp);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Unexpected error");
       } finally {
