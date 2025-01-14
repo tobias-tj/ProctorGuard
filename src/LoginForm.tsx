@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { universities, users } from "./types/data/universities";
 
 interface LoginFormProps {
-  onLogin: () => void; // Nueva prop para manejar el estado de login global
+  onLogin: () => void;
 }
 
 const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
@@ -24,7 +24,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
     if (user) {
       localStorage.setItem("isLoggedIn", "true");
       localStorage.setItem("user", JSON.stringify(user));
-      onLogin(); // Llamada a la función para actualizar el estado global
+      onLogin();
       navigate("/dashboard");
     } else {
       setError("Credenciales incorrectas. Por favor verifica.");
@@ -32,15 +32,18 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-100">
+    <div className="flex flex-col justify-center items-center min-h-screen bg-gray-100">
       <div className="bg-white shadow-lg rounded-lg flex w-4/5 max-w-4xl">
-        {/* Imagen del lado izquierdo */}
         <div
-          className="hidden md:block w-1/2 bg-cover bg-center rounded-l-lg"
-          style={{ backgroundImage: "url('/logoyvaga.png')" }}
+          className="hidden md:block w-1/2 rounded-l-lg"
+          style={{
+            backgroundImage: "url('/IMG_1091.JPG')",
+            backgroundSize: "76% auto",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat"
+          }}
         ></div>
 
-        {/* Formulario */}
         <div className="w-full md:w-1/2 p-8">
           <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">
             ¡Bienvenido!
@@ -52,7 +55,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
           <div className="mb-4">
             <label className="block text-gray-700 mb-2">Universidad</label>
             <select
-              className="w-full border rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+              className="w-full border rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#e76e50]"
               value={selectedUniversity}
               onChange={(e) => setSelectedUniversity(e.target.value)}
             >
@@ -69,7 +72,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
             <label className="block text-gray-700 mb-2">Correo</label>
             <input
               type="email"
-              className="w-full border rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+              className="w-full border rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#e76e50]"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
@@ -79,22 +82,30 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
             <label className="block text-gray-700 mb-2">Contraseña</label>
             <input
               type="password"
-              className="w-full border rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+              className="w-full border rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#e76e50]"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
 
-          {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
+          {/* Mensaje de error */}
+          <div className="h-5 mb-4">
+            {error && <p className="text-red-500 text-sm">{error}</p>}
+          </div>
 
           <button
             onClick={handleLogin}
-            className="w-full bg-green-500 text-white rounded-lg px-4 py-2 font-semibold hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500"
+            className="w-full bg-[#f06d4c] text-white rounded-lg px-4 py-2 font-semibold hover:bg-[#f0623e] focus:outline-none focus:ring-2 focus:ring-[#e76e50]"
           >
             Iniciar Sesión
           </button>
         </div>
       </div>
+      
+      {/* Texto de Yvagacore en la tarjeta */}
+      <p className="text-gray-500 text-sm mt-8">
+        Power By YvagaCore
+      </p>
     </div>
   );
 };
