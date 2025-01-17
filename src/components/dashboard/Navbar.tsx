@@ -13,7 +13,7 @@ const Navbar: React.FC<NavbarProps> = ({ title }) => {
   const [userData, setUserData] = useState({
     fullName: "Usuario",
     university: "Universidad",
-    profilePicture: null,
+    profilePicture: "logoUni.png",
   });
   const { theme, setTheme } = useTheme();
 
@@ -83,7 +83,7 @@ const Navbar: React.FC<NavbarProps> = ({ title }) => {
         <Avatar>
           {userData.profilePicture ? (
             <AvatarImage
-              src={userData.profilePicture}
+              src="logoUni.png"
               alt={userData.fullName}
               className="w-8 h-8"
             />
