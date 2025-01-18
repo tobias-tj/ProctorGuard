@@ -1,5 +1,5 @@
 export type ReportInfo = {
-  tipo_incidencia: string;
+  dominio_referencia: string;
   fecha_captura: Date;
   imagenes_base64: string;
   score: number;

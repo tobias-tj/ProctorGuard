@@ -12,7 +12,7 @@ import { useState } from "react";
 import { useListExamByStudentId } from "@/hooks/useStudentInfo";
 import formatDateToString from "@/utils/formatDateToString";
 import LevelIndicator from "@/components/admin/LevelIndicator";
-import { pdf, PDFDownloadLink } from "@react-pdf/renderer";
+import { pdf } from "@react-pdf/renderer";
 import ReportDocument from "@/documents/ReportDocumentStudent";
 import { saveAs } from "file-saver";
 import JSZip from "jszip";

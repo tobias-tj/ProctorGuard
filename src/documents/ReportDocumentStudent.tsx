@@ -177,7 +177,7 @@ const ReportDocument = ({
             {reportInfo!.map((incidencia: any, index: number) => (
               <View key={index} style={styles.tableRow}>
                 <Text style={styles.tableCell}>
-                  {incidencia.tipo_incidencia}
+                  {incidencia.dominio_referencia}
                 </Text>
                 <Text style={styles.tableCell}>
                   {new Date(incidencia.fecha_captura).toLocaleDateString()}
