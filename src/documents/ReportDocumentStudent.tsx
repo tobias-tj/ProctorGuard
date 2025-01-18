@@ -180,7 +180,14 @@ const ReportDocument = ({
                   {incidencia.dominio_referencia}
                 </Text>
                 <Text style={styles.tableCell}>
-                  {new Date(incidencia.fecha_captura).toLocaleDateString()}
+                  {new Date(incidencia.fecha_captura).toLocaleTimeString(
+                    "es-ES",
+                    {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      hour12: false,
+                    }
+                  )}
                 </Text>
                 <Text style={styles.tableCell}>{incidencia.score}</Text>
                 <Image
