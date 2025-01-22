@@ -1,8 +1,16 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2 } from "lucide-react"; // Icono de carga animada
+import { useEffect } from "react";
 
 const ClosePage = () => {
+  useEffect(() => {
+    // Simular el cierre de sesión
+    setTimeout(() => {
+      localStorage.clear();
+      window.location.href = "/";
+    }, 3000);
+  }, []);
   return (
     <div className="flex items-center justify-center h-screen shadow-lg bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 lg:w-[900px] sm:w-[400px]">
       <Card className="w-full max-w-sm text-center shadow-md">

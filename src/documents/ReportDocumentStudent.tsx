@@ -28,19 +28,34 @@ const styles = StyleSheet.create({
     height: 60,
   },
   logoYvaga: {
-    width: 55,
-    height: 55,
+    width: 35,
+    height: 45,
   },
   reportDate: {
     fontSize: 12,
     textAlign: "right",
     color: "#333",
   },
-  header: {
-    fontSize: 18,
-    marginBottom: 20,
+  headerReporte: {
+    fontSize: 20,
     textAlign: "center",
     color: "#333",
+    marginBottom: 10,
+  },
+  header: {
+    marginTop: 10,
+    fontSize: 14,
+    textAlign: "center",
+    color: "#fff",
+    width: "100%",
+    borderStyle: "solid",
+    borderWidth: 0.5,
+    borderColor: "#000",
+    backgroundColor: "#f98012",
+    minHeight: 25,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingTop: 5,
   },
   infoRow: {
     flexDirection: "row",
@@ -57,22 +72,44 @@ const styles = StyleSheet.create({
   table: {
     display: "flex",
     width: "auto",
-    borderStyle: "solid",
-    borderWidth: 1,
-    borderColor: "#bdbdbd",
   },
   tableRow: {
     flexDirection: "row",
+    alignContent: "center",
+    justifyContent: "center",
+    alignItems: "center",
+    display: "flex",
   },
   tableCell: {
-    borderStyle: "solid",
-    borderWidth: 1,
-    borderColor: "#bdbdbd",
+    borderColor: "#000000",
     padding: 5,
     flex: 1,
+    minWidth: 100,
+    borderStyle: "solid",
+    borderWidth: 0.7,
+    textAlign: "center",
+    justifyContent: "center",
+    alignItems: "center",
+    display: "flex",
+    height: "100%",
+  },
+  tableHeader: {
+    borderColor: "#000000",
+    padding: 5,
+    flex: 1,
+    minWidth: 100,
+    borderTopStyle: "solid",
+    borderLeftStyle: "solid",
+    borderRightStyle: "solid",
+    borderTopWidth: 0.5,
+    borderLeftWidth: 0.5,
+    borderRightWidth: 0.5,
+    backgroundColor: "#f98012",
+    color: "#fff",
+    textAlign: "center",
   },
   boldText: {
-    fontWeight: "bold",
+    fontWeight: "extrabold",
   },
   footerContainer: {
     position: "absolute",
@@ -122,12 +159,12 @@ const ReportDocument = ({
         </View>
 
         {/* Título principal */}
-        <Text style={styles.header}>Reporte de Exámenes</Text>
+        <Text style={styles.headerReporte}>Reporte de Exámenes</Text>
 
         {/* Sección de información adicional */}
         <View>
           <View style={styles.infoRow}>
-            <Text style={styles.infoTitle}>Estudiante:</Text>
+            <Text style={styles.infoTitle}>Nombre del estudiante:</Text>
             <Text style={styles.infoContent}>{studentName}</Text>
           </View>
           <View style={styles.infoRow}>
@@ -136,42 +173,49 @@ const ReportDocument = ({
           </View>
 
           <View style={styles.infoRow}>
-            <Text style={styles.infoTitle}>Examen:</Text>
+            <Text style={styles.infoTitle}>Nombre del examen:</Text>
             <Text style={styles.infoContent}>
               {selectedExams[0].descripcion}
             </Text>
           </View>
-
           <View style={styles.infoRow}>
-            <Text style={styles.infoTitle}>Puntos:</Text>
+            <Text style={styles.infoTitle}>
+              Fecha de realización del examen:
+            </Text>
             <Text style={styles.infoContent}>
-              {100 - Number(selectedExams[0].puntos)}
+              {reportInfo !== null
+                ? new Date(reportInfo[0].fecha_captura).toLocaleDateString()
+                : ""}
             </Text>
           </View>
 
           <View style={styles.infoRow}>
-            <Text style={styles.infoTitle}>Id relacion:</Text>
+            <Text style={styles.infoTitle}>Total de puntos acumulados:</Text>
             <Text style={styles.infoContent}>
-              {selectedExams[0].idrelacion}
+              {100 < Number(selectedExams[0].puntos)
+                ? 0
+                : 100 - Number(selectedExams[0].puntos)}
             </Text>
           </View>
         </View>
 
         <View>
-          <Text style={styles.header}>Incidencias</Text>
+          <Text style={styles.header}>INCIDENCIAS DETECTADAS</Text>
           <View style={styles.table}>
             {/* Cabecera de la tabla */}
             <View style={styles.tableRow}>
-              <Text style={[styles.tableCell, styles.boldText]}>
+              <Text style={[styles.tableHeader, styles.boldText]}>
                 Tipo de Incidencia
               </Text>
-              <Text style={[styles.tableCell, styles.boldText]}>
+              <Text style={[styles.tableHeader, styles.boldText]}>
                 Fecha Captura
               </Text>
-              <Text style={[styles.tableCell, styles.boldText]}>
+              <Text
+                style={[{ ...styles.tableHeader, width: 100 }, styles.boldText]}
+              >
                 Puntos Restados
               </Text>
-              <Text style={[styles.tableCell, styles.boldText]}>Imagen</Text>
+              <Text style={[styles.tableHeader, styles.boldText]}>Imagen</Text>
             </View>
             {/* Filas de datos */}
             {reportInfo!.map((incidencia: any, index: number) => (
@@ -192,7 +236,10 @@ const ReportDocument = ({
                 <Text style={styles.tableCell}>{incidencia.score}</Text>
                 <Image
                   src={incidencia.imagenes_base64}
-                  style={{ height: 100, width: 100 }}
+                  style={[
+                    { ...styles.tableCell, width: 150 },
+                    { minHeight: 100 },
+                  ]}
                 />
               </View>
             ))}

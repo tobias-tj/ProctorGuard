@@ -160,7 +160,9 @@ const ExamByStudentById = () => {
                   </TableCell>
                   <TableCell>{exam.descripcion}</TableCell>
                   <TableCell>{formatDateToString(exam.fecha)}</TableCell>
-                  <TableCell>{100 - Number(exam.puntos)}</TableCell>
+                  <TableCell>
+                    {100 < Number(exam.puntos) ? 0 : 100 - Number(exam.puntos)}
+                  </TableCell>
                   <TableCell>
                     <LevelIndicator points={100 - Number(exam.puntos)} />
                   </TableCell>
