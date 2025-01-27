@@ -6,7 +6,6 @@ import {
   UserPen,
   PowerIcon,
   MessageCircleQuestionIcon,
-  CalendarRange,
 } from "lucide-react";
 
 import {

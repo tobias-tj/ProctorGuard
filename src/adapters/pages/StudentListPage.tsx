@@ -62,7 +62,11 @@ const StudentListPage = () => {
       <TableCell className="hidden md:table-cell">{item.correo}</TableCell>
       <TableCell>
         <div className="flex items-center gap-2">
-          <Link to={`/list/exams/${item.ci}`}>
+          <Link
+            to={`/list/exams/${item.ci}?name=${encodeURIComponent(
+              item.nombre
+            )}`}
+          >
             <Button variant="outline" className="p-2 rounded-full">
               <Eye size={16} />
             </Button>

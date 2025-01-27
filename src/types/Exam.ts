@@ -4,4 +4,5 @@ export type Exam = {
   fecha: string;
   puntos: string;
   received?: number;
+  idrelacion?: string;
 };
