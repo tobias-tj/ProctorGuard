@@ -53,7 +53,7 @@ const ExamByStudentById = () => {
 
   const handleDownloadAllReports = async () => {
     const selectedData = examListData!.filter((exam) =>
-      selectedExams.includes(exam.examen_id.toString())
+      selectedExams.includes(exam.idrelacion!)
     );
 
     const zip = new JSZip();
@@ -76,7 +76,7 @@ const ExamByStudentById = () => {
       ).toBlob();
 
       // Agregar el PDF al archivo ZIP
-      zip.file(`reporte-examen-${exam.examen_id}.pdf`, blob);
+      zip.file(`reporte-examen-${exam.idrelacion}.pdf`, blob);
     }
 
     // Generar el archivo ZIP y descargarlo
@@ -145,16 +145,12 @@ const ExamByStudentById = () => {
             </TableHeader>
             <TableBody>
               {examListData.map((exam) => (
-                <TableRow key={exam.examen_id}>
+                <TableRow key={exam.idrelacion}>
                   <TableCell>
                     <input
                       type="checkbox"
-                      checked={selectedExams.includes(
-                        exam.examen_id.toString()
-                      )}
-                      onChange={() =>
-                        handleSelectExam(exam.examen_id.toString())
-                      }
+                      checked={selectedExams.includes(exam.idrelacion!)}
+                      onChange={() => handleSelectExam(exam.idrelacion!)}
                       className="w-4 h-4"
                     />
                   </TableCell>

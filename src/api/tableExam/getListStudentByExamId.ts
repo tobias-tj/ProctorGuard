@@ -9,6 +9,7 @@ export const fetchListStudentByExamId = async (examId: number) => {
       `${API_URL}/getExamIncidentByUserId/${examId}`
     );
 
+    console.log(response.data);
     return response.data;
   } catch (error) {
     console.error("Error fetching data by examID:", error);
