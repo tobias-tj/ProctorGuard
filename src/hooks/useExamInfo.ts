@@ -1,6 +1,7 @@
 import { fetchDashboardExamTotalCount } from "@/api/admin/dashboardAdmin";
 import { fetchExamListData } from "@/api/tableExam/getListExams";
 import { fetchListStudentByExamId } from "@/api/tableExam/getListStudentByExamId";
+import { Exam } from "@/types/Exam";
 import { ExamTable } from "@/types/ExamTable";
 import { StudentByExamId } from "@/types/StudentByExamId";
 import { useEffect, useState } from "react";
@@ -122,6 +123,9 @@ export const useListStudentsByExamId = (examId: number) => {
   const [studentListDataByExam, setStudentListDataByExam] = useState<
     StudentByExamId[] | null
   >(null);
+  const [transformedExamList, setTransformedExamList] = useState<Exam[] | null>(
+    null
+  ); // Nueva lista transformada
 
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -130,9 +134,20 @@ export const useListStudentsByExamId = (examId: number) => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        console.log(examId);
         const data = await fetchListStudentByExamId(examId);
+
         setStudentListDataByExam(data);
+
+        // Transform data into Exam[]
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const exams = data.map((item: any) => ({
+          examenId: item.examenid,
+          descripcion: item.descripcion,
+          fecha: item.fecha,
+          puntos: item.puntos,
+        }));
+        setTransformedExamList(exams);
+        console.log("Examnes info-->", exams);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Unexpected error");
       } finally {
@@ -142,5 +157,5 @@ export const useListStudentsByExamId = (examId: number) => {
     fetchData();
   }, [examId]);
 
-  return { studentListDataByExam, loading, error };
+  return { studentListDataByExam, transformedExamList, loading, error };
 };

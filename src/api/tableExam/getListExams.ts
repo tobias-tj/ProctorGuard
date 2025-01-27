@@ -5,6 +5,7 @@ const API_URL = "http://localhost:3000/api";
 export const fetchExamListData = async () => {
   try {
     const response = await axios.get(`${API_URL}/getAllListExamInfo`);
+    console.log(response.data);
     return response.data;
   } catch (error) {
     console.log("Error fetching ListExamData", error);

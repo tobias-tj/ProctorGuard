@@ -12,15 +12,19 @@ import { useState } from "react";
 import { useListStudentsByExamId } from "@/hooks/useExamInfo";
 import formatDateToString from "@/utils/formatDateToString";
 import LevelIndicator from "@/components/admin/LevelIndicator";
+import { fetchReportDataByIdRelation } from "@/api/report/getReportData";
+import ReportDocument from "@/documents/ReportDocumentStudent";
+import { pdf } from "@react-pdf/renderer";
+import { saveAs } from "file-saver";
+import JSZip from "jszip";
 
 const StudentByExamId = () => {
   const { examId } = useParams<{ examId: string }>();
   const navigate = useNavigate();
   const [selectedStudents, setSelectedStudents] = useState<string[]>([]);
 
-  const { studentListDataByExam, loading, error } = useListStudentsByExamId(
-    Number(examId)
-  );
+  const { studentListDataByExam, transformedExamList, loading } =
+    useListStudentsByExamId(Number(examId));
 
   // // Filtrar los estudiantes que han rendido el examen con el ID específico
   // const studentsWithExam = studentsData.filter((student) =>
@@ -40,13 +44,37 @@ const StudentByExamId = () => {
     });
   };
 
-  const handleDownloadReport = () => {
-    // Lógica para descargar el informe de los estudiantes seleccionados
-    alert(
-      `Descargando informe de los estudiantes con ID: ${selectedStudents.join(
-        ", "
-      )}`
+  const handleDownloadAllReports = async () => {
+    const selectedData = studentListDataByExam!.filter((student) =>
+      selectedStudents.includes(student.idrelacion.toString())
     );
+    const zip = new JSZip();
+
+    // Generar y descargar cada PDF
+    for (const exam of selectedData) {
+      const reportListData = await fetchReportDataByIdRelation(
+        exam.idrelacion.toString() || "0"
+      );
+
+      const blob = await pdf(
+        <ReportDocument
+          logoUrl="/logoUni.png"
+          companyLogoUrl="/logoUni1.png"
+          studentName={studentListDataByExam![0].nombre!}
+          ci={studentListDataByExam![0].id!.toString()}
+          selectedExams={[exam]}
+          reportInfo={reportListData}
+        /> // Generar PDF para un examen
+      ).toBlob();
+
+      // Agregar el PDF al archivo ZIP
+      zip.file(`reporte-examen-${exam.idrelacion}.pdf`, blob);
+    }
+
+    // Generar el archivo ZIP y descargarlo
+    zip.generateAsync({ type: "blob" }).then((zipBlob) => {
+      saveAs(zipBlob, "reportes-examenes.zip");
+    });
   };
 
   // Si está cargando, muestra el texto "Cargando..."
@@ -106,13 +134,15 @@ const StudentByExamId = () => {
             </TableHeader>
             <TableBody>
               {studentListDataByExam.map((student) => (
-                <TableRow key={student.id}>
+                <TableRow key={student.idrelacion}>
                   <TableCell>
                     <input
                       type="checkbox"
-                      checked={selectedStudents.includes(student.id.toString())}
+                      checked={selectedStudents.includes(
+                        student.idrelacion.toString()
+                      )}
                       onChange={() =>
-                        handleSelectStudent(student.id.toString())
+                        handleSelectStudent(student.idrelacion.toString())
                       }
                       className="w-4 h-4"
                     />
@@ -126,7 +156,37 @@ const StudentByExamId = () => {
                     <LevelIndicator points={100 - Number(student.puntos)} />
                   </TableCell>
                   <TableCell>
-                    <Button variant="outline">
+                    <Button
+                      variant="outline"
+                      onClick={async () => {
+                        try {
+                          const reportListData =
+                            await fetchReportDataByIdRelation(
+                              student.idrelacion.toString()
+                            );
+
+                          // Generar PDF
+                          const blob = await pdf(
+                            <ReportDocument
+                              logoUrl="/logoUni.png"
+                              companyLogoUrl="/logoUni1.png"
+                              studentName={student.nombre}
+                              ci={student.id.toString()}
+                              selectedExams={transformedExamList!}
+                              reportInfo={reportListData}
+                            />
+                          ).toBlob();
+
+                          // Descargar el archivo PDF
+                          saveAs(blob, `reporte-examen-${student.id}.pdf`);
+                        } catch (error) {
+                          console.log("Error al generar el PDF:", error);
+                          alert(
+                            "Ocurrió un error al generar el PDF. Por favor, inténtalo de nuevo."
+                          );
+                        }
+                      }}
+                    >
                       <Download />
                     </Button>
                   </TableCell>
@@ -143,7 +203,7 @@ const StudentByExamId = () => {
 
       {selectedStudents.length > 0 && selectedStudents.length <= 10 && (
         <div className="mt-4">
-          <Button onClick={handleDownloadReport} className="text-white ">
+          <Button onClick={handleDownloadAllReports} className="text-white ">
             Descargar Informe
           </Button>
         </div>
