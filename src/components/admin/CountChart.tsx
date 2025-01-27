@@ -42,8 +42,6 @@ export function CountChart() {
   const { dashboardData } = useDashboardData();
   const { examTotalData } = useExamTotalCount();
 
-  console.log("Lo que viene de info count --> ", dashboardData);
-
   // Actualizar los datos de exámenes
   const examData = getNewExamData(examTotalData);
 

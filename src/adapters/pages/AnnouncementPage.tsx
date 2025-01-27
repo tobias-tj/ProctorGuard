@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   Card,
   CardHeader,
@@ -7,85 +6,73 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Trash } from "lucide-react";
-
-const initialAnnouncements = [
-  {
-    id: 1,
-    title: "Bienvenido a tu dashboard",
-    date: "04/10/25",
-    message:
-      "Consulta el material de ayuda, si necesita alguna información adicional.",
-    read: false,
-  },
-  {
-    id: 2,
-    title: "Actualización recibida",
-    date: "02/08/25",
-    message: "Nueva Versión 2.0 realizada con éxito.",
-    read: false,
-  },
-  {
-    id: 3,
-    title: "Pendiente de pago",
-    date: "03/09/25",
-    message: "Se está terminando el saldo de tu cuenta.",
-    read: false,
-  },
-];
+import { useAnuncioListData } from "@/hooks/useAnuncio";
 
 const AnnouncementPage = () => {
-  const [announcements, setAnnouncements] = useState(initialAnnouncements);
+  const { anuncioListData, loading, error, updateAnuncioStatus } =
+    useAnuncioListData();
 
   const markAsRead = (id: number) => {
-    setAnnouncements((prev) =>
-      prev.map((announcement) =>
-        announcement.id === id ? { ...announcement, read: true } : announcement
-      )
-    );
+    updateAnuncioStatus(id);
   };
 
-  const deleteAnnouncement = (id: number) => {
-    setAnnouncements((prev) =>
-      prev.filter((announcement) => announcement.id !== id)
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <p className="text-lg font-semibold text-primary">
+          Cargando anuncios...
+        </p>
+      </div>
     );
-  };
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <p className="text-lg font-semibold text-red-500">
+          Ocurrió un error al cargar los anuncios: {error}
+        </p>
+      </div>
+    );
+  }
+
+  if (!Array.isArray(anuncioListData) || anuncioListData.length === 0) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <p className="text-lg font-semibold text-gray-500">
+          No hay anuncios disponibles.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="h-full p-4 space-y-4 lg:w-[900px] sm:w-[400px]">
       <div className="space-y-4">
-        {announcements.map(({ id, title, date, message, read }) => (
+        {anuncioListData.map(({ id, titulo, fecha, descripcion, visto }) => (
           <Card
             key={id}
-            className={`transition-all ${read ? "opacity-50" : ""}`}
+            className={`transition-all ${visto ? "opacity-50" : ""}`}
           >
             <CardHeader>
               <CardTitle className="flex items-center justify-between">
-                <span>{title}</span>
-                <span className="text-sm text-gray-500">{date}</span>
+                <span>{titulo}</span>
+                <span className="text-sm text-gray-500">
+                  {new Date(fecha).toLocaleDateString()}
+                </span>
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p>{message}</p>
+              <p>{descripcion}</p>
             </CardContent>
             <CardFooter className="flex items-center justify-between">
-              {!read ? (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => markAsRead(id)}
-                >
-                  Marcar como leído
-                </Button>
-              ) : (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => deleteAnnouncement(id)}
-                >
-                  <Trash className="w-4 h-4 mr-2" /> Eliminar
-                </Button>
-              )}
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => markAsRead(id)}
+              >
+                Marcar como leído
+              </Button>
             </CardFooter>
           </Card>
         ))}
