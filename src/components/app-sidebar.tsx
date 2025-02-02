@@ -3,7 +3,6 @@ import {
   Users,
   NotebookPen,
   Megaphone,
-  UserPen,
   PowerIcon,
   MessageCircleQuestionIcon,
 } from "lucide-react";
@@ -47,12 +46,6 @@ const projects = [
 
 // Menu Config
 const config = [
-  {
-    url: "/account",
-    icon: UserPen,
-    name: "Mi Cuenta",
-  },
-
   {
     url: "/help",
     icon: MessageCircleQuestionIcon,

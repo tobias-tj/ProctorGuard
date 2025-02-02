@@ -1,4 +1,9 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import { useState } from "react";
 import AdminPage from "../pages/AdminPage";
 import DashboardLayout from "@/layouts/Dashboard";
@@ -6,16 +11,16 @@ import Navbar from "@/components/dashboard/Navbar";
 import StudentListPage from "../pages/StudentListPage";
 import ExamListPage from "../pages/ExamListPage";
 import AnnouncementPage from "../pages/AnnouncementPage";
-import AccountPage from "../pages/AccountPage";
 import HelpPage from "../pages/HelpPage";
 import ClosePage from "../pages/ClosePage";
 import ExamByStudentById from "../pages/ExamByStudentIdPage";
 import StudentByExamId from "../pages/StudentByExamIdPage";
 import LoginForm from "@/LoginForm";
 
-
 function AppRoutes() {
-  const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem("isLoggedIn") === "true");
+  const [isLoggedIn, setIsLoggedIn] = useState(
+    localStorage.getItem("isLoggedIn") === "true"
+  );
 
   const handleLogin = () => {
     localStorage.setItem("isLoggedIn", "true");
@@ -34,7 +39,11 @@ function AppRoutes() {
         <Route
           path="/"
           element={
-            isLoggedIn ? <Navigate to="/dashboard" /> : <LoginForm onLogin={handleLogin} />
+            isLoggedIn ? (
+              <Navigate to="/dashboard" />
+            ) : (
+              <LoginForm onLogin={handleLogin} />
+            )
           }
         />
 
@@ -85,19 +94,6 @@ function AppRoutes() {
               <DashboardLayout>
                 <Navbar title="Avisos" />
                 <AnnouncementPage />
-              </DashboardLayout>
-            ) : (
-              <Navigate to="/" />
-            )
-          }
-        />
-        <Route
-          path="/account"
-          element={
-            isLoggedIn ? (
-              <DashboardLayout>
-                <Navbar title="Cuenta" />
-                <AccountPage />
               </DashboardLayout>
             ) : (
               <Navigate to="/" />
