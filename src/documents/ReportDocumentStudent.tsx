@@ -124,6 +124,18 @@ const styles = StyleSheet.create({
     color: "#000",
     marginLeft: 10, // Espacio entre el logo y la firma
   },
+  imagesContainer: {
+    marginTop: 20,
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 10, // Espacio entre las imágenes
+  },
+  image: {
+    width: 150, // Tamaño de la imagen
+    height: 100,
+    borderWidth: 0.5,
+    borderColor: "#000",
+  },
 });
 
 // Componente PDF
@@ -215,7 +227,6 @@ const ReportDocument = ({
               >
                 Puntos Restados
               </Text>
-              <Text style={[styles.tableHeader, styles.boldText]}>Imagen</Text>
             </View>
             {/* Filas de datos */}
             {reportInfo!.map((incidencia: any, index: number) => (
@@ -234,16 +245,24 @@ const ReportDocument = ({
                   )}
                 </Text>
                 <Text style={styles.tableCell}>{incidencia.score}</Text>
-                <Image
-                  src={incidencia.imagenes_base64}
-                  style={[
-                    { ...styles.tableCell, width: 150 },
-                    { minHeight: 100 },
-                  ]}
-                />
               </View>
             ))}
           </View>
+        </View>
+
+        {/* Mostrar imágenes debajo de la tabla */}
+        <View style={styles.imagesContainer}>
+          {reportInfo!.map((incidencia: any, index: number) =>
+            incidencia.imagenes_base64.map(
+              (imagen: string, imgIndex: number) => (
+                <Image
+                  key={`${index}-${imgIndex}`}
+                  src={imagen}
+                  style={styles.image}
+                />
+              )
+            )
+          )}
         </View>
 
         {/* Firma */}
