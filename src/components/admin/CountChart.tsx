@@ -134,11 +134,11 @@ export function CountChart() {
             </div>
           </div>
         </div>
-        <div className="flex justify-center gap-8 mt-6">
+        <div className="flex justify-center items-center gap-8 h-full w-full">
           {currentData.map((item, index) => (
             <div
               key={index}
-              className="flex flex-col items-center gap-2 transition-transform duration-200 ease-in-out transform hover:scale-105"
+              className="flex flex-col items-center justify-center gap-2 transition-transform duration-200 ease-in-out transform hover:scale-105"
             >
               <div
                 className="w-6 h-6 rounded-full"
