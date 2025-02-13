@@ -116,7 +116,7 @@ export function CountChart() {
                 dataKey="value"
                 onMouseEnter={onPieEnter}
                 onMouseLeave={onPieLeave}
-                activeIndex={activeIndex}
+                activeIndex={activeIndex ?? undefined}
                 activeShape={renderActiveShape}
               >
                 {currentData.map((entry, index) => (

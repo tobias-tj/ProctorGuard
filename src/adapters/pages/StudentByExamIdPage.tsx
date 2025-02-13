@@ -17,6 +17,7 @@ import ReportDocument from "@/documents/ReportDocumentStudent";
 import { pdf } from "@react-pdf/renderer";
 import { saveAs } from "file-saver";
 import JSZip from "jszip";
+import { Exam } from "@/types/Exam";
 
 const StudentByExamId = () => {
   const { examId } = useParams<{ examId: string }>();
@@ -25,6 +26,13 @@ const StudentByExamId = () => {
 
   const { studentListDataByExam, transformedExamList, loading } =
     useListStudentsByExamId(Number(examId));
+  const transformedExamListTyped: Exam[] =
+    transformedExamList?.map((exam) => ({
+      examen_id: exam.examen_id ?? 0, // Evitar valores undefined
+      descripcion: exam.descripcion ?? "Sin descripción",
+      fecha: exam.fecha ?? "", // Add default value for fecha
+      puntos: exam.puntos ?? 0, // Add default value for puntos
+    })) || [];
 
   // // Filtrar los estudiantes que han rendido el examen con el ID específico
   // const studentsWithExam = studentsData.filter((student) =>
@@ -45,9 +53,13 @@ const StudentByExamId = () => {
   };
 
   const handleDownloadAllReports = async () => {
-    const selectedData = studentListDataByExam!.filter((student) =>
+    const selectedData = studentListDataByExam?.filter((student) =>
       selectedStudents.includes(student.idrelacion.toString())
     );
+    if (!selectedData) {
+      alert("No hay datos seleccionados para descargar.");
+      return;
+    }
     const zip = new JSZip();
 
     // Generar y descargar cada PDF
@@ -62,7 +74,7 @@ const StudentByExamId = () => {
           companyLogoUrl="/logoUni1.png"
           studentName={studentListDataByExam![0].nombre!}
           ci={studentListDataByExam![0].id!.toString()}
-          selectedExams={[exam]}
+          selectedExams={transformedExamListTyped}
           reportInfo={reportListData}
         /> // Generar PDF para un examen
       ).toBlob();
