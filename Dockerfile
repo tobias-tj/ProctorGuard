@@ -2,35 +2,37 @@
 # Step 1: Build react app
 # ------------------------
 
-# Use node:latest as the builder image
+# Usar una imagen base de Node.js
 FROM node:latest AS builder
 
-# Set the working directory
+# Establecer el directorio de trabajo
 WORKDIR /app
 
-# Copy package.json and install app dependencies
+# Copiar package.json e instalar dependencias
 COPY package.json .
 RUN npm install
 
-# Copy other project files and build
-COPY . ./
+# Copiar el resto de los archivos del proyecto
+COPY . .
+
+# Construir la aplicación
 RUN npm run build
 
-# --------------------------------------
-# Step 2: Set up nginx to serve the app
-# --------------------------------------
-# Use nginx:latest as the base image
-FROM nginx:latest
+# ------------------------
+# Step 2: Serve the app
+# ------------------------
 
-# Overwriting nginx config with our own config file
-RUN rm -rf /etc/nginx/conf.d/nginx.conf
-COPY ./nginx.conf /etc/nginx/conf.d/nginx.conf
+# Usar una imagen ligera de Nginx para servir la aplicación
+FROM nginx:alpine
 
-# Copy over the build created in the Step 1
+# Copiar los archivos construidos desde la etapa anterior
 COPY --from=builder /app/dist /usr/share/nginx/html
 
-# Set the working directory
-WORKDIR /usr/share/nginx/html
+# Copiar la configuración de Nginx
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Start nginx server
-CMD ["/bin/bash", "-c", "nginx -g \"daemon off;\""]
+# Exponer el puerto 80 (puerto predeterminado de Nginx)
+EXPOSE 80
+
+# Comando para iniciar Nginx
+CMD ["nginx", "-g", "daemon off;"]
