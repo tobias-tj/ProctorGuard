@@ -3,13 +3,13 @@
 # ------------------------
 
 # Usar una imagen base de Node.js
-FROM node:latest AS builder
+FROM node:18-alpine AS builder
 
 # Establecer el directorio de trabajo
 WORKDIR /app
 
 # Copiar package.json e instalar dependencias
-COPY package.json .
+COPY package.json package-lock.json* ./
 RUN npm install
 
 # Copiar el resto de los archivos del proyecto
