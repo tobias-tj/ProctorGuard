@@ -1,12 +1,12 @@
 import axios from "axios";
 
-const API_URL = import.meta.env.VITE_API_URL;
+// const API_URL = import.meta.env.VITE_API_URL;
 
 export const fetchListStudentByExamId = async (examId: number) => {
   try {
     // Concatenamos el examId en la URL correctamente
     const response = await axios.get(
-      `${API_URL}/getExamIncidentByUserId/${examId}`
+      `http://161.35.53.140/back/api/getExamIncidentByUserId/${examId}`
     );
 
     console.log(response.data);

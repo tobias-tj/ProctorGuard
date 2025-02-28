@@ -1,10 +1,10 @@
 import axios from "axios";
 
-const API_URL = import.meta.env.VITE_API_URL;
-
 export const fetchDashboardData = async () => {
   try {
-    const response = await axios.get(`${API_URL}/getAllStudentsCount`);
+    const response = await axios.get(
+      `http://161.35.53.140/back/api/getAllStudentsCount`
+    );
     return response.data.data;
   } catch (error) {
     console.error("Error fetching dashboard data:", error);
@@ -14,7 +14,9 @@ export const fetchDashboardData = async () => {
 
 export const fetchDashboardExamTotalCount = async () => {
   try {
-    const response = await axios.get(`${API_URL}/getAllTotalExamCount`);
+    const response = await axios.get(
+      `http://161.35.53.140/back/api/getAllTotalExamCount`
+    );
     return response.data.data;
   } catch (error) {
     console.error("Error fetching exam dashboard count:", error);
