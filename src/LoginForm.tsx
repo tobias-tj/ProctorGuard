@@ -1,111 +1,187 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { universities, users } from "./types/data/universities";
+import { loginAdmin } from "./api/admin/loginAdmin";
+import { University } from "./types/University";
+import { getUniversities } from "./api/admin/getUniversities";
+import { Button } from "./components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "./components/ui/card";
+import { Label } from "./components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./components/ui/select";
+import { Input } from "./components/ui/input";
+import { Alert, AlertDescription } from "./components/ui/alert";
 
 interface LoginFormProps {
   onLogin: () => void;
 }
 
 const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
-  const [selectedUniversity, setSelectedUniversity] = useState("");
+  const [universities, setUniversities] = useState<University[]>([]);
+  const [selectedUniversityId, setSelectedUniversityId] = useState<
+    number | null
+  >(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
-  const handleLogin = () => {
-    const user = users.find(
-      (u) =>
-        u.email === email &&
-        u.password === password &&
-        u.university === selectedUniversity
-    );
+  // Cargar universidades al montar el componente
+  useEffect(() => {
+    const fetchUniversities = async () => {
+      try {
+        const data = await getUniversities();
+        setUniversities(data);
+      } catch (error) {
+        console.log(error);
+        setError("Error al cargar las universidades");
+      }
+    };
 
-    if (user) {
-      localStorage.setItem("isLoggedIn", "true");
-      localStorage.setItem("user", JSON.stringify(user));
+    fetchUniversities();
+  }, []);
+
+  const handleLogin = async () => {
+    if (!selectedUniversityId) {
+      setError("Por favor selecciona una universidad");
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const loginResponse = await loginAdmin(
+        selectedUniversityId,
+        email,
+        password
+      );
+
+      localStorage.setItem("authToken", loginResponse!.token);
+      localStorage.setItem(
+        "user",
+        JSON.stringify({
+          userName: loginResponse?.user,
+          universityName: universities.find(
+            (u) => u.iduniversidad === selectedUniversityId
+          )?.nombreuniversidad,
+        })
+      );
+
       onLogin();
       navigate("/dashboard");
-    } else {
+    } catch (err) {
+      console.error("Error en login:", err);
       setError("Credenciales incorrectas. Por favor verifica.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="flex flex-col justify-center items-center min-h-screen bg-gray-100">
-      <div className="bg-white shadow-lg rounded-lg flex w-4/5 max-w-4xl">
-        <div
-          className="hidden md:block w-1/2 rounded-l-lg"
-          style={{
-            backgroundImage: "url('/IMG_1091.JPG')",
-            backgroundSize: "76% auto",
-            backgroundPosition: "center",
-            backgroundRepeat: "no-repeat"
-          }}
-        ></div>
+    <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-gray-100">
+      <Card className="w-full max-w-2xl">
+        <div className="flex flex-col md:flex-row">
+          {/* Imagen lateral (solo en desktop) */}
+          <div
+            className="hidden bg-center bg-cover rounded-l-lg md:block md:w-1/2"
+            style={{ backgroundImage: "url('/IMG_1091.JPG')" }}
+          />
 
-        <div className="w-full md:w-1/2 p-8">
-          <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">
-            ¡Bienvenido!
-          </h2>
-          <p className="text-gray-500 text-center mb-8">
-            Selecciona tu universidad y accede a tu cuenta.
-          </p>
+          {/* Contenido del formulario */}
+          <div className="w-full p-6 md:w-1/2">
+            <CardHeader>
+              <CardTitle className="text-2xl font-bold text-center">
+                ¡Bienvenido!
+              </CardTitle>
+              <p className="text-sm text-center text-muted-foreground">
+                Selecciona tu universidad y accede a tu cuenta.
+              </p>
+            </CardHeader>
 
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-2">Universidad</label>
-            <select
-              className="w-full border rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#e76e50]"
-              value={selectedUniversity}
-              onChange={(e) => setSelectedUniversity(e.target.value)}
-            >
-              <option value="">Selecciona una universidad</option>
-              {universities.map((uni) => (
-                <option key={uni} value={uni}>
-                  {uni}
-                </option>
-              ))}
-            </select>
+            <CardContent>
+              <div className="space-y-4">
+                {/* Select de Universidad */}
+                <div className="space-y-2">
+                  <Label htmlFor="university">Universidad</Label>
+                  <Select
+                    onValueChange={(value) =>
+                      setSelectedUniversityId(Number(value))
+                    }
+                    disabled={loading || universities.length === 0}
+                  >
+                    <SelectTrigger id="university">
+                      <SelectValue placeholder="Selecciona una universidad" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {universities.map((uni) => (
+                        <SelectItem
+                          key={uni.iduniversidad}
+                          value={uni.iduniversidad.toString()}
+                        >
+                          {uni.nombreuniversidad}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {/* Campo de Email */}
+                <div className="space-y-2">
+                  <Label htmlFor="email">Correo</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    disabled={loading}
+                    placeholder="tu@email.com"
+                  />
+                </div>
+
+                {/* Campo de Contraseña */}
+                <div className="space-y-2">
+                  <Label htmlFor="password">Contraseña</Label>
+                  <Input
+                    id="password"
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    disabled={loading}
+                    placeholder="••••••••"
+                  />
+                </div>
+
+                {/* Mensaje de error */}
+                {error && (
+                  <Alert variant="destructive">
+                    <AlertDescription>{error}</AlertDescription>
+                  </Alert>
+                )}
+
+                {/* Botón de Login */}
+                <Button
+                  onClick={handleLogin}
+                  disabled={
+                    loading || !selectedUniversityId || !email || !password
+                  }
+                  className="w-full"
+                >
+                  {loading ? "Iniciando sesión..." : "Iniciar Sesión"}
+                </Button>
+              </div>
+            </CardContent>
           </div>
-
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-2">Correo</label>
-            <input
-              type="email"
-              className="w-full border rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#e76e50]"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
-
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-2">Contraseña</label>
-            <input
-              type="password"
-              className="w-full border rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#e76e50]"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
-
-          {/* Mensaje de error */}
-          <div className="h-5 mb-4">
-            {error && <p className="text-red-500 text-sm">{error}</p>}
-          </div>
-
-          <button
-            onClick={handleLogin}
-            className="w-full bg-[#f06d4c] text-white rounded-lg px-4 py-2 font-semibold hover:bg-[#f0623e] focus:outline-none focus:ring-2 focus:ring-[#e76e50]"
-          >
-            Iniciar Sesión
-          </button>
         </div>
-      </div>
-      
-      {/* Texto de Yvagacore en la tarjeta */}
-      <p className="text-gray-500 text-sm mt-8">
-        Power By YvagaCore
-      </p>
+      </Card>
+
+      {/* Footer */}
+      <p className="mt-8 text-sm text-muted-foreground">Power By YvagaCore</p>
     </div>
   );
 };
