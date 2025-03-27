@@ -2,11 +2,18 @@ import axios from "axios";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-// Fijarse si conviene traer todos los examenes que tengan que ver con este alumno sin importar si tiene o no incidencias
-export const fetchListExamByStudentId = async (studentId: number) => {
+export const fetchListExamByStudentId = async (
+  studentId: number,
+  authToken: string
+) => {
   try {
     const response = await axios.get(
-      `${API_URL}/getIncidentsByStudentId?id=${studentId}`
+      `${API_URL}/getIncidentsByStudentId?id=${studentId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      }
     );
     return response.data.data;
   } catch (error) {

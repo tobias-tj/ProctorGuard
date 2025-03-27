@@ -53,7 +53,9 @@ export const useStudentListData = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const data = await fetchStudentListData();
+        const authToken = localStorage.getItem("authToken") || "NULL-TOKEN";
+
+        const data = await fetchStudentListData(authToken);
         setStudentListData(data);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Unexpected error");
@@ -76,7 +78,9 @@ export const useListExamByStudentId = (studentId: number) => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const data = await fetchListExamByStudentId(studentId);
+        const authToken = localStorage.getItem("authToken") || "NULL-TOKEN";
+
+        const data = await fetchListExamByStudentId(studentId, authToken);
         setExamListData(data);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Unexpected error");
