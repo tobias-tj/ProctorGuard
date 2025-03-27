@@ -2,9 +2,13 @@ import axios from "axios";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-export const fetchAllAnuncios = async () => {
+export const fetchAllAnuncios = async (authToken: string) => {
   try {
-    const response = await axios.get(`${API_URL}/getAllAnuncios`);
+    const response = await axios.get(`${API_URL}/getAllAnuncios`, {
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+      },
+    });
     return response.data;
   } catch (error) {
     console.log("Error fetching anunciosList", error);
