@@ -4,11 +4,17 @@ import axios from "axios";
 const API_URL = import.meta.env.VITE_API_URL;
 
 export const fetchReportDataByIdRelation = async (
-  idrelacion: string
+  idrelacion: string,
+  authToken: string
 ): Promise<ReportInfo[]> => {
   try {
     const response = await axios.get(
-      `${API_URL}/generateReportByIdRelation?idrelacion=${idrelacion}`
+      `${API_URL}/generateReportByIdRelation?idrelacion=${idrelacion}`,
+      {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      }
     );
     return response.data.data;
   } catch (error) {

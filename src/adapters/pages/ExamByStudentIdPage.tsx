@@ -27,6 +27,8 @@ const ExamByStudentById = () => {
 
   const location = useLocation();
 
+  const authToken = localStorage.getItem("authToken") || "NULL-TOKEN";
+
   // Obtener el nombre codificado desde los parámetros de consulta
   const queryParams = new URLSearchParams(location.search);
   const encodedName = queryParams.get("name");
@@ -61,7 +63,8 @@ const ExamByStudentById = () => {
     // Generar y descargar cada PDF
     for (const exam of selectedData) {
       const reportListData = await fetchReportDataByIdRelation(
-        exam.idrelacion || "0"
+        exam.idrelacion || "0",
+        authToken
       );
 
       const blob = await pdf(
@@ -170,7 +173,8 @@ const ExamByStudentById = () => {
                           // Obtener los datos del reporte del examen actual
                           const reportListData =
                             await fetchReportDataByIdRelation(
-                              exam.idrelacion || "0"
+                              exam.idrelacion || "0",
+                              authToken
                             );
 
                           // Generar el PDF dinámicamente
