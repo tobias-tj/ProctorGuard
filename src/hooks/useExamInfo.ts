@@ -19,7 +19,9 @@ export const useExamTotalCount = () => {
     const fetchData = async () => {
       try {
         setLoadingExam(true);
-        const data = await fetchDashboardExamTotalCount();
+        const authToken = localStorage.getItem("authToken") || "NULL-TOKEN";
+
+        const data = await fetchDashboardExamTotalCount(authToken);
         //VERIFICAR POrque me traeun dato negativo.
         const temp = {
           total_examenes: Number(data.total_examenes),

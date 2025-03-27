@@ -2,9 +2,13 @@ import axios from "axios";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-export const fetchDashboardData = async () => {
+export const fetchDashboardData = async (authToken: string) => {
   try {
-    const response = await axios.get(`${API_URL}/getAllStudentsCount`);
+    const response = await axios.get(`${API_URL}/getAllStudentsCount`, {
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+      },
+    });
     return response.data.data;
   } catch (error) {
     console.error("Error fetching dashboard data:", error);
@@ -12,9 +16,13 @@ export const fetchDashboardData = async () => {
   }
 };
 
-export const fetchDashboardExamTotalCount = async () => {
+export const fetchDashboardExamTotalCount = async (authToken: string) => {
   try {
-    const response = await axios.get(`${API_URL}/getAllTotalExamCount`);
+    const response = await axios.get(`${API_URL}/getAllTotalExamCount`, {
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+      },
+    });
     return response.data.data;
   } catch (error) {
     console.error("Error fetching exam dashboard count:", error);

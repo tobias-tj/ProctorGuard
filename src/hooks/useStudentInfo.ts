@@ -18,7 +18,9 @@ export const useDashboardData = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const data = await fetchDashboardData();
+        const authToken = localStorage.getItem("authToken") || "NULL-TOKEN";
+
+        const data = await fetchDashboardData(authToken);
         setDashboardData({
           total_estudiantes: Number(data.total_estudiantes),
           total_estudiantes_con_incidencias: Number(
