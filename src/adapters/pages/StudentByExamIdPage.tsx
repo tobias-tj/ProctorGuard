@@ -23,6 +23,7 @@ const StudentByExamId = () => {
   const { examId } = useParams<{ examId: string }>();
   const navigate = useNavigate();
   const [selectedStudents, setSelectedStudents] = useState<string[]>([]);
+  const authToken = localStorage.getItem("authToken") || "NULL-TOKEN";
 
   const { studentListDataByExam, transformedExamList, loading } =
     useListStudentsByExamId(Number(examId));
@@ -65,7 +66,8 @@ const StudentByExamId = () => {
     // Generar y descargar cada PDF
     for (const exam of selectedData) {
       const reportListData = await fetchReportDataByIdRelation(
-        exam.idrelacion.toString() || "0"
+        exam.idrelacion.toString() || "0",
+        authToken
       );
 
       const blob = await pdf(
@@ -174,7 +176,8 @@ const StudentByExamId = () => {
                         try {
                           const reportListData =
                             await fetchReportDataByIdRelation(
-                              student.idrelacion.toString()
+                              student.idrelacion.toString(),
+                              authToken
                             );
 
                           // Generar PDF
