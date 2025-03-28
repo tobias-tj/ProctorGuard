@@ -19,8 +19,9 @@ export const useExamTotalCount = () => {
     const fetchData = async () => {
       try {
         setLoadingExam(true);
-        const data = await fetchDashboardExamTotalCount();
-        //VERIFICAR POrque me traeun dato negativo.
+        const authToken = localStorage.getItem("authToken") || "NULL-TOKEN";
+
+        const data = await fetchDashboardExamTotalCount(authToken);
         const temp = {
           total_examenes: Number(data.total_examenes),
           total_examenes_con_incidencias:
@@ -105,7 +106,8 @@ export const useExamListData = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const data = await fetchExamListData();
+        const authToken = localStorage.getItem("authToken") || "NULL-TOKEN";
+        const data = await fetchExamListData(authToken);
         setExamListData(data);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Unexpected error");
@@ -134,7 +136,8 @@ export const useListStudentsByExamId = (examId: number) => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const data = await fetchListStudentByExamId(examId);
+        const authToken = localStorage.getItem("authToken") || "NULL-TOKEN";
+        const data = await fetchListStudentByExamId(examId, authToken);
 
         setStudentListDataByExam(data);
 

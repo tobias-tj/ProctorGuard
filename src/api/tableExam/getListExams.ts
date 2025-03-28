@@ -2,10 +2,15 @@ import axios from "axios";
 
 // const API_URL = import.meta.env.VITE_API_URL;
 
-export const fetchExamListData = async () => {
+export const fetchExamListData = async (authToken: string) => {
   try {
     const response = await axios.get(
-      `http://161.35.53.140/back/api/getAllListExamInfo`
+      `http://161.35.53.140/back/api/getAllListExamInfo`,
+      {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      }
     );
     console.log(response.data);
     return response.data;

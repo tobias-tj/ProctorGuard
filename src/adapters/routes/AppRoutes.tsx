@@ -27,11 +27,6 @@ function AppRoutes() {
     setIsLoggedIn(true);
   };
 
-  /*const handleLogout = () => {
-    localStorage.removeItem("isLoggedIn");
-    setIsLoggedIn(false);
-  };*/
-
   return (
     <Router>
       <Routes>

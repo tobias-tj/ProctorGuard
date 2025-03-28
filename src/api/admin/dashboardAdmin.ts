@@ -1,9 +1,14 @@
 import axios from "axios";
 
-export const fetchDashboardData = async () => {
+export const fetchDashboardData = async (authToken: string) => {
   try {
     const response = await axios.get(
-      `http://161.35.53.140/back/api/getAllStudentsCount`
+      `http://161.35.53.140/back/api/getAllStudentsCount`,
+      {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      }
     );
     return response.data.data;
   } catch (error) {
@@ -12,10 +17,15 @@ export const fetchDashboardData = async () => {
   }
 };
 
-export const fetchDashboardExamTotalCount = async () => {
+export const fetchDashboardExamTotalCount = async (authToken: string) => {
   try {
     const response = await axios.get(
-      `http://161.35.53.140/back/api/getAllTotalExamCount`
+      `http://161.35.53.140/back/api/getAllTotalExamCount`,
+      {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      }
     );
     return response.data.data;
   } catch (error) {
