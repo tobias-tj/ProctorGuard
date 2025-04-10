@@ -9,8 +9,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { PieChart, Pie, Cell, ResponsiveContainer, Sector } from "recharts";
 import { Button } from "../ui/button";
-import { useDashboardData } from "@/hooks/useStudentInfo";
-import { useExamTotalCount } from "@/hooks/useExamInfo";
 
 const renderActiveShape = (props: any) => {
   const { cx, cy, innerRadius, outerRadius, startAngle, endAngle, fill } =
@@ -29,8 +27,20 @@ const renderActiveShape = (props: any) => {
     </g>
   );
 };
+interface CountChartProps {
+  dashboardData: {
+    total_estudiantes: number;
+    total_estudiantes_con_incidencias: number;
+    total_estudiantes_sin_incidencias: number;
+  } | null;
+  examTotalData: {
+    total_examenes: number;
+    total_examenes_con_incidencias: number;
+    total_examenes_sin_incidencias: number;
+  } | null;
+}
 
-export function CountChart() {
+export function CountChart({ dashboardData, examTotalData }: CountChartProps) {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [currentData, setCurrentData] = useState<any[]>([
     { name: "Correctos", value: 0, color: "hsl(var(--chart-2))" },
@@ -38,9 +48,6 @@ export function CountChart() {
   ]);
   const [title, setTitle] = useState("Total de Exámenes");
   const [isExamMode, setIsExamMode] = useState(true);
-
-  const { dashboardData } = useDashboardData();
-  const { examTotalData } = useExamTotalCount();
 
   // Actualizar los datos de exámenes
   const examData = getNewExamData(examTotalData);

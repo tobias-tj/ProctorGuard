@@ -40,7 +40,6 @@ export const useExamTotalCount = () => {
         setLoadingExam(false);
       }
     };
-
     fetchData();
   }, []);
 
