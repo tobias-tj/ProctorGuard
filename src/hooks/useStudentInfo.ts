@@ -36,7 +36,6 @@ export const useDashboardData = () => {
         setLoading(false);
       }
     };
-
     fetchData();
   }, []);
 
