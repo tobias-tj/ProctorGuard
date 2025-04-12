@@ -6,6 +6,7 @@ import { getUniversities } from "./api/admin/getUniversities";
 import { Button } from "./components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "./components/ui/card";
 import { Label } from "./components/ui/label";
+import { toast } from "@/components/ui/toaster";
 import {
   Select,
   SelectContent,
@@ -14,7 +15,6 @@ import {
   SelectValue,
 } from "./components/ui/select";
 import { Input } from "./components/ui/input";
-import { Alert, AlertDescription } from "./components/ui/alert";
 
 interface LoginFormProps {
   onLogin: () => void;
@@ -22,16 +22,12 @@ interface LoginFormProps {
 
 const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
   const [universities, setUniversities] = useState<University[]>([]);
-  const [selectedUniversityId, setSelectedUniversityId] = useState<
-    number | null
-  >(null);
+  const [selectedUniversityId, setSelectedUniversityId] = useState<number | null>(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
-  // Cargar universidades al montar el componente
   useEffect(() => {
     const fetchUniversities = async () => {
       try {
@@ -39,7 +35,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
         setUniversities(data);
       } catch (error) {
         console.log(error);
-        setError("Error al cargar las universidades");
+        toast.error("Error al cargar las universidades. Por favor, intenta de nuevo más tarde.");
       }
     };
 
@@ -48,19 +44,12 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
 
   const handleLogin = async () => {
     if (!selectedUniversityId) {
-      setError("Por favor selecciona una universidad");
+      toast.error("Por favor selecciona una universidad antes de continuar.");
       return;
     }
 
-    setLoading(true);
-    setError(null);
-
     try {
-      const loginResponse = await loginAdmin(
-        selectedUniversityId,
-        email,
-        password
-      );
+      const loginResponse = await loginAdmin(selectedUniversityId, email, password);
 
       localStorage.setItem("authToken", loginResponse!.token);
       localStorage.setItem(
@@ -77,7 +66,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
       navigate("/dashboard");
     } catch (err) {
       console.error("Error en login:", err);
-      setError("Credenciales incorrectas. Por favor verifica.");
+      toast.error("Credenciales incorrectas. Por favor verifica.");
     } finally {
       setLoading(false);
     }
@@ -85,12 +74,17 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-gray-100">
-      <Card className="w-full max-w-2xl">
+      <Card className="w-full max-w-4xl"> 
         <div className="flex flex-col md:flex-row">
           {/* Imagen lateral (solo en desktop) */}
           <div
             className="hidden bg-center bg-cover rounded-l-lg md:block md:w-1/2"
-            style={{ backgroundImage: "url('/IMG_1091.JPG')" }}
+            style={{
+              backgroundImage: "url('/IMG_1091.JPG')",
+              backgroundSize: '80%',
+              backgroundRepeat: 'no-repeat',
+              backgroundPosition: 'center',
+            }}
           />
 
           {/* Contenido del formulario */}
@@ -106,13 +100,10 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
 
             <CardContent>
               <div className="space-y-4">
-                {/* Select de Universidad */}
                 <div className="space-y-2">
                   <Label htmlFor="university">Universidad</Label>
                   <Select
-                    onValueChange={(value) =>
-                      setSelectedUniversityId(Number(value))
-                    }
+                    onValueChange={(value) => setSelectedUniversityId(Number(value))}
                     disabled={loading || universities.length === 0}
                   >
                     <SelectTrigger id="university">
@@ -131,7 +122,6 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
                   </Select>
                 </div>
 
-                {/* Campo de Email */}
                 <div className="space-y-2">
                   <Label htmlFor="email">Correo</Label>
                   <Input
@@ -141,10 +131,10 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
                     onChange={(e) => setEmail(e.target.value)}
                     disabled={loading}
                     placeholder="tu@email.com"
+                    className="focus:none focus:none focus:outline-none"
                   />
                 </div>
 
-                {/* Campo de Contraseña */}
                 <div className="space-y-2">
                   <Label htmlFor="password">Contraseña</Label>
                   <Input
@@ -157,19 +147,9 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
                   />
                 </div>
 
-                {/* Mensaje de error */}
-                {error && (
-                  <Alert variant="destructive">
-                    <AlertDescription>{error}</AlertDescription>
-                  </Alert>
-                )}
-
-                {/* Botón de Login */}
                 <Button
                   onClick={handleLogin}
-                  disabled={
-                    loading || !selectedUniversityId || !email || !password
-                  }
+                  disabled={loading || !selectedUniversityId || !email || !password}
                   className="w-full"
                 >
                   {loading ? "Iniciando sesión..." : "Iniciar Sesión"}
@@ -180,8 +160,8 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
         </div>
       </Card>
 
-      {/* Footer */}
       <p className="mt-8 text-sm text-muted-foreground">Power By YvagaCore</p>
+
     </div>
   );
 };
