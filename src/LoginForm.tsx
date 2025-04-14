@@ -7,14 +7,9 @@ import { Button } from "./components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "./components/ui/card";
 import { Label } from "./components/ui/label";
 import { toast } from "@/components/ui/toaster";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "./components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./components/ui/select";
 import { Input } from "./components/ui/input";
+import { useUser } from "@/Context/UserContext"; 
 
 interface LoginFormProps {
   onLogin: () => void;
@@ -27,6 +22,9 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  // Usamos el context para guardar el usuario
+  const { setUser } = useUser();
 
   useEffect(() => {
     const fetchUniversities = async () => {
@@ -47,21 +45,25 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
       toast.error("Por favor selecciona una universidad antes de continuar.");
       return;
     }
-
+  
     try {
       const loginResponse = await loginAdmin(selectedUniversityId, email, password);
-
+  
+      // Aseguramos que los valores sean siempre strings
+      const user = {
+        userName: loginResponse?.user || "", // Si no hay user, asignamos una cadena vacía
+        universityName: universities.find(
+          (u) => u.iduniversidad === selectedUniversityId
+        )?.nombreuniversidad || "", // Si no hay universidad, asignamos una cadena vacía
+      };
+  
       localStorage.setItem("authToken", loginResponse!.token);
-      localStorage.setItem(
-        "user",
-        JSON.stringify({
-          userName: loginResponse?.user,
-          universityName: universities.find(
-            (u) => u.iduniversidad === selectedUniversityId
-          )?.nombreuniversidad,
-        })
-      );
-
+      localStorage.setItem("user", JSON.stringify(user));
+  
+      // Actualizamos el context directamente
+      setUser(user); 
+  
+      // Llamamos a la función onLogin y redirigimos
       onLogin();
       navigate("/dashboard");
     } catch (err) {
@@ -74,7 +76,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-gray-100">
-      <Card className="w-full max-w-4xl"> 
+      <Card className="w-full max-w-4xl">
         <div className="flex flex-col md:flex-row">
           {/* Imagen lateral (solo en desktop) */}
           <div
@@ -86,7 +88,6 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
               backgroundPosition: 'center',
             }}
           />
-
           {/* Contenido del formulario */}
           <div className="w-full p-6 md:w-1/2">
             <CardHeader>
@@ -131,7 +132,6 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
                     onChange={(e) => setEmail(e.target.value)}
                     disabled={loading}
                     placeholder="tu@email.com"
-                    className="focus:none focus:none focus:outline-none"
                   />
                 </div>
 
@@ -161,7 +161,6 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
       </Card>
 
       <p className="mt-8 text-sm text-muted-foreground">Power By YvagaCore</p>
-
     </div>
   );
 };

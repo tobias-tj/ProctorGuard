@@ -1,48 +1,22 @@
 import { Megaphone, Moon, Sun } from "lucide-react";
 import { Button } from "../ui/button";
-import { useEffect, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { useTheme } from "@/theme-provider";
+import { useUser } from "@/Context/UserContext";
 
 interface NavbarProps {
-  title?: string; // Hacer que el título sea opcional
+  title?: string;
 }
 
 const Navbar: React.FC<NavbarProps> = ({ title }) => {
-  const [mounted, setMounted] = useState(false);
-  const [userData, setUserData] = useState({
-    fullName: "Usuario",
-    university: "Universidad",
-    profilePicture: "logoUni.png",
-  });
   const { theme, setTheme } = useTheme();
-
-  useEffect(() => {
-    setMounted(true);
-
-    const user = localStorage.getItem("user");
-    if (user) {
-      const parsedUser = JSON.parse(user);
-      setUserData({
-        fullName: parsedUser.fullName || "Usuario",
-        university: parsedUser.university || "Universidad",
-        profilePicture: parsedUser.profilePicture || null,
-      });
-    }
-  }, []);
-
-  if (!mounted) {
-    return null;
-  }
+  const { user } = useUser();
 
   return (
     <div className="flex items-center justify-between p-4">
-      {/* Mostrar título dinámico */}
       {title && <h1 className="text-xl font-bold">{title}</h1>}
 
-      {/* Icons y Usuario */}
       <div className="flex items-center justify-end w-full gap-6">
-        {/* Botón para alternar tema */}
         <Button
           variant="ghost"
           size="icon"
@@ -57,7 +31,6 @@ const Navbar: React.FC<NavbarProps> = ({ title }) => {
           <span className="sr-only">Toggle theme</span>
         </Button>
 
-        {/* Botón de notificaciones */}
         <Button
           variant="ghost"
           size="icon"
@@ -69,30 +42,28 @@ const Navbar: React.FC<NavbarProps> = ({ title }) => {
           </div>
         </Button>
 
-        {/* Información del usuario */}
         <div className="flex flex-col items-end">
           <span className="text-xs font-medium leading-3">
-            {userData.fullName}
+            {user?.userName ?? "Usuario"}
           </span>
           <span className="text-[10px] text-gray-500">
-            {userData.university}
+            {user?.universityName ?? "Universidad"}
           </span>
         </div>
 
-        {/* Avatar del usuario */}
         <Avatar>
-          {userData.profilePicture ? (
+          {user?.profilePicture ? (
             <AvatarImage
-              src="logoUni.png"
-              alt={userData.fullName}
+              src={user.profilePicture}
+              alt={user.userName}
               className="w-8 h-8"
             />
           ) : (
             <AvatarFallback>
-              {userData.fullName
-                .split(" ")
-                .map((name) => name.charAt(0))
-                .join("")}
+              {user?.userName
+                ?.split(" ")
+                .map((name: string) => name.charAt(0))
+                .join("") ?? "U"}
             </AvatarFallback>
           )}
         </Avatar>

@@ -7,7 +7,7 @@ const App: React.FC = () => {
     <ThemeProvider>
       <>
         <AppRoutes />
-        <Toaster position="top-center"/>
+        <Toaster position="top-center"/> { /*Notificacion en el logín ,se agrega temporalmente acá*/ } 
       </>
     </ThemeProvider>
   );
