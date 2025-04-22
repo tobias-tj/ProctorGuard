@@ -1,22 +1,35 @@
+import { FetchExamListParams } from "@/types/ExamTable";
 import { logoutGeneral } from "@/utils/logoutGeneral";
 import axios from "axios";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-export const fetchExamListData = async (authToken: string) => {
+export const fetchExamListData = async (
+  authToken: string,
+  params: FetchExamListParams = {}
+) => {
   try {
     const response = await axios.get(`${API_URL}/getAllListExamInfo`, {
       headers: {
         Authorization: `Bearer ${authToken}`,
       },
+      params: params,
     });
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
       const statusCode = error.response?.status;
+      console.error("Error en la solicitud Axios:", error.message);
+      console.error("URL solicitada:", error.config?.url);
+      console.error("Parámetros enviados:", error.config?.params);
+      console.error("Respuesta de error:", error.response?.data);
       if (statusCode === 401) {
         console.error("Token de autenticación no válido o expirado.");
         logoutGeneral();
+      } else {
+        console.error(
+          `Error HTTP ${statusCode} al obtener la lista de exámenes.`
+        );
       }
     } else {
       console.error("Error inesperado:", error);
