@@ -49,7 +49,9 @@ const AnnouncementPage = () => {
   return (
     <div className="h-full p-4 space-y-4 lg:w-[900px] sm:w-[400px]">
       <div className="space-y-4">
-        {anuncioListData.map(({ id, titulo, fecha, descripcion, visto }) => (
+      {[...anuncioListData]
+        .sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime())
+        .map(({ id, titulo, fecha, descripcion, visto }) => (
           <Card
             key={id}
             className={`transition-all ${visto ? "opacity-50" : ""}`}
