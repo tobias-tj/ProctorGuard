@@ -95,11 +95,11 @@ const Announcements = () => {
           announcements.map((announcement, index) => (
             <div
               key={index}
-              className="p-5 border border-gray-100 rounded-md shadow-md"
+              className="p-5 border border-gray-100 dark:border-gray-800 rounded-md shadow-md"
             >
               <div className="flex items-center justify-between">
                 <h2 className="font-medium">{announcement.title}</h2>
-                <span className="px-2 py-1 text-xs text-gray-500 bg-white rounded-md">
+                <span className="px-2 py-1 text-xs text-gray-500 dark:text-gray-50 bg-white dark:bg-gray-700 rounded-md">
                   {announcement.date}
                 </span>
               </div>

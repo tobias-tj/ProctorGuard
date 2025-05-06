@@ -23,7 +23,7 @@ import CreditCard from "./CreditCard";
 // Menu items.
 const projects = [
   {
-    url: "/",
+    url: "/dashboard",
     icon: Home,
     name: "Inicio",
   },
@@ -86,8 +86,8 @@ export function AppSidebar() {
                       href={project.url}
                       className={`flex items-center gap-4 px-4 py-3 transition-all rounded-lg ${
                         location.pathname === project.url
-                          ? "bg-gray-200 text-blue-600 font-bold border-l-4 border-blue-600"
-                          : "hover:bg-gray-100 dark:hover:bg-gray-700"
+                          ? "bg-gray-200 dark:bg-gray-700 text-blue-600 font-bold border-l-4 border-blue-600"
+                          : "hover:bg-gray-100 dark:hover:bg-gray-800"
                       }`}
                     >
                       <project.icon className="w-5 h-5" />

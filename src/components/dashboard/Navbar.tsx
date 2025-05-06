@@ -1,4 +1,4 @@
-import { Megaphone, Moon, Sun } from "lucide-react";
+import { Moon, Sun } from "lucide-react";
 import { Button } from "../ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { useTheme } from "@/theme-provider";
@@ -29,17 +29,6 @@ const Navbar: React.FC<NavbarProps> = ({ title }) => {
             <Moon className="h-[1.2rem] w-[1.2rem]" />
           )}
           <span className="sr-only">Toggle theme</span>
-        </Button>
-
-        <Button
-          variant="ghost"
-          size="icon"
-          className="relative bg-white rounded-full w-7 h-7 dark:bg-gray-800"
-        >
-          <Megaphone className="w-5 h-5" />
-          <div className="absolute flex items-center justify-center w-5 h-5 text-xs text-white rounded-full bg-primary -top-3 -right-3">
-            1
-          </div>
         </Button>
 
         <div className="flex flex-col items-end">
