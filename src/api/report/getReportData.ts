@@ -9,7 +9,7 @@ export const fetchReportDataByIdRelation = async (
 ): Promise<ReportInfo[]> => {
   try {
     const response = await axios.get(
-      `http://161.35.53.140/back/api/generateReportByIdRelation?idrelacion=${idrelacion}`,
+      `https://api.yvagacore.com/back/api/generateReportByIdRelation?idrelacion=${idrelacion}`,
       {
         headers: {
           Authorization: `Bearer ${authToken}`,

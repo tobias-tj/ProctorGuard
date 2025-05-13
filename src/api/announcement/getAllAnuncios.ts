@@ -5,7 +5,7 @@ import axios from "axios";
 export const fetchAllAnuncios = async (authToken: string) => {
   try {
     const response = await axios.get(
-      `http://161.35.53.140/back/api/getAllAnuncios`,
+      `https://api.yvagacore.com/back/api/getAllAnuncios`,
       {
         headers: {
           Authorization: `Bearer ${authToken}`,

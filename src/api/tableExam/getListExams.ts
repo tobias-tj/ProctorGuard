@@ -5,7 +5,7 @@ import axios from "axios";
 export const fetchExamListData = async (authToken: string) => {
   try {
     const response = await axios.get(
-      `http://161.35.53.140/back/api/getAllListExamInfo`,
+      `https://api.yvagacore.com/back/api/getAllListExamInfo`,
       {
         headers: {
           Authorization: `Bearer ${authToken}`,

@@ -8,7 +8,7 @@ export const loginAdmin = async (
 ): Promise<LoginData | undefined> => {
   try {
     const response = await axios.post(
-      `http://161.35.53.140/back/api/admin/login`,
+      `https://api.yvagacore.com/back/api/admin/login`,
       {
         idUniversidad,
         email,

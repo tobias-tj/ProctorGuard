@@ -3,7 +3,7 @@ import axios from "axios";
 export const fetchDashboardData = async (authToken: string) => {
   try {
     const response = await axios.get(
-      `http://161.35.53.140/back/api/getAllStudentsCount`,
+      `https://api.yvagacore.com/back/api/getAllStudentsCount`,
       {
         headers: {
           Authorization: `Bearer ${authToken}`,
@@ -20,7 +20,7 @@ export const fetchDashboardData = async (authToken: string) => {
 export const fetchDashboardExamTotalCount = async (authToken: string) => {
   try {
     const response = await axios.get(
-      `http://161.35.53.140/back/api/getAllTotalExamCount`,
+      `https://api.yvagacore.com/back/api/getAllTotalExamCount`,
       {
         headers: {
           Authorization: `Bearer ${authToken}`,

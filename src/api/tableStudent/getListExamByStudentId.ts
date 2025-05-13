@@ -8,7 +8,7 @@ export const fetchListExamByStudentId = async (
 ) => {
   try {
     const response = await axios.get(
-      `http://161.35.53.140/back/api/getIncidentsByStudentId?id=${studentId}`,
+      `https://api.yvagacore.com/back/api/getIncidentsByStudentId?id=${studentId}`,
       {
         headers: {
           Authorization: `Bearer ${authToken}`,

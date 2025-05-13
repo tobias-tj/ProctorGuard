@@ -5,7 +5,7 @@ import axios from "axios";
 export const fetchStudentListData = async (authToken: string) => {
   try {
     const response = await axios.get(
-      `http://161.35.53.140/back/api/getStudentIncident`,
+      `https://api.yvagacore.com/back/api/getStudentIncident`,
       {
         headers: {
           Authorization: `Bearer ${authToken}`,

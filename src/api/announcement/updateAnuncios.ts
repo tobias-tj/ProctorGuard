@@ -5,7 +5,7 @@ import axios from "axios";
 export const updateAnuncio = async (id: number, authToken: string) => {
   try {
     const response = await axios.patch(
-      `http://161.35.53.140/back/api/updateStatusAnuncio`,
+      `https://api.yvagacore.com/back/api/updateStatusAnuncio`,
       {
         id,
       },
