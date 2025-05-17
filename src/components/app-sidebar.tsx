@@ -19,6 +19,8 @@ import {
 } from "@/components/ui/sidebar";
 import { useLocation } from "react-router-dom";
 import CreditCard from "./CreditCard";
+import { useEffect, useState } from "react";
+import { fetchDashboardCredits } from "@/api/admin/dashboardAdmin";
 
 // Menu items.
 const projects = [
@@ -59,6 +61,24 @@ const config = [
 ];
 export function AppSidebar() {
   const location = useLocation();
+
+  const [availableCredit, setAvailableCredit] = useState<number>(0);
+  const [totalUsage, setTotalUsage] = useState<number>(0);
+  const authToken = localStorage.getItem("authToken") || "";
+
+  useEffect(() => {
+    const fetchCredits = async () => {
+      try {
+        const data = await fetchDashboardCredits(authToken);
+        setAvailableCredit(Number(data.creditosDisponibles));
+        setTotalUsage(Number(data.creditosUtilizados));
+      } catch (error) {
+        console.error("Error al obtener los créditos del dashboard", error);
+      }
+    };
+
+    fetchCredits();
+  }, [authToken]);
 
   return (
     <Sidebar className="w-64 shadow-lg bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
@@ -132,7 +152,7 @@ export function AppSidebar() {
         <h2 className="mb-2 text-sm font-semibold text-center">
           Resumen de Créditos
         </h2>
-        <CreditCard availableCredit={1000} totalUsage={400} />
+        <CreditCard availableCredit={availableCredit} totalUsage={totalUsage} />
       </div>
     </Sidebar>
   );
