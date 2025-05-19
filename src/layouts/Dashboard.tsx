@@ -10,7 +10,6 @@ export default function DashboardLayout({
 }) {
   const navigate = useNavigate();
 
-  // Verificar si el usuario está autenticado
   useEffect(() => {
     const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
     if (!isLoggedIn) {
@@ -20,8 +19,10 @@ export default function DashboardLayout({
 
   return (
     <SidebarProvider>
-      <AppSidebar />
-      <main>{children}</main>
+      <div className="flex w-full min-h-screen overflow-hidden">
+        <AppSidebar />
+        <main className="flex-1 p-4 overflow-y-auto">{children}</main>
+      </div>
     </SidebarProvider>
   );
 }

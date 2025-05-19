@@ -19,11 +19,13 @@ import {
 } from "@/components/ui/sidebar";
 import { useLocation } from "react-router-dom";
 import CreditCard from "./CreditCard";
+import { useEffect, useState } from "react";
+import { fetchDashboardCredits } from "@/api/admin/dashboardAdmin";
 
 // Menu items.
 const projects = [
   {
-    url: "/",
+    url: "/dashboard",
     icon: Home,
     name: "Inicio",
   },
@@ -60,6 +62,24 @@ const config = [
 export function AppSidebar() {
   const location = useLocation();
 
+  const [availableCredit, setAvailableCredit] = useState<number>(0);
+  const [totalUsage, setTotalUsage] = useState<number>(0);
+  const authToken = localStorage.getItem("authToken") || "";
+
+  useEffect(() => {
+    const fetchCredits = async () => {
+      try {
+        const data = await fetchDashboardCredits(authToken);
+        setAvailableCredit(Number(data.creditosDisponibles));
+        setTotalUsage(Number(data.creditosUtilizados));
+      } catch (error) {
+        console.error("Error al obtener los créditos del dashboard", error);
+      }
+    };
+
+    fetchCredits();
+  }, [authToken]);
+
   return (
     <Sidebar className="w-64 shadow-lg bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
       <SidebarContent>
@@ -86,8 +106,8 @@ export function AppSidebar() {
                       href={project.url}
                       className={`flex items-center gap-4 px-4 py-3 transition-all rounded-lg ${
                         location.pathname === project.url
-                          ? "bg-gray-200 text-blue-600 font-bold border-l-4 border-blue-600"
-                          : "hover:bg-gray-100 dark:hover:bg-gray-700"
+                          ? "bg-gray-20 dark:bg-gray-700 text-blue-600 font-bold border-l-4 border-blue-600"
+                          : "hover:bg-gray-100 dark:hover:bg-gray-800"
                       }`}
                     >
                       <project.icon className="w-5 h-5" />
@@ -132,7 +152,7 @@ export function AppSidebar() {
         <h2 className="mb-2 text-sm font-semibold text-center">
           Resumen de Créditos
         </h2>
-        <CreditCard availableCredit={1000} totalUsage={400} />
+        <CreditCard availableCredit={availableCredit} totalUsage={totalUsage} />
       </div>
     </Sidebar>
   );

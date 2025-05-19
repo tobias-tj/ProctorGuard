@@ -2,7 +2,7 @@ import { fetchDashboardExamTotalCount } from "@/api/admin/dashboardAdmin";
 import { fetchExamListData } from "@/api/tableExam/getListExams";
 import { fetchListStudentByExamId } from "@/api/tableExam/getListStudentByExamId";
 import { Exam } from "@/types/Exam";
-import { ExamTable } from "@/types/ExamTable";
+import { ExamTable, FetchExamListParams } from "@/types/ExamTable";
 import { StudentByExamId } from "@/types/StudentByExamId";
 import { useEffect, useState } from "react";
 
@@ -97,8 +97,14 @@ export const useExamTotalCount = () => {
 //   return { examIncidentCount, loadingExam, error };
 // };
 
-export const useExamListData = () => {
+export const useExamListData = (
+  searchData: string,
+  page: number,
+  perPage: number
+) => {
   const [examListData, setExamListData] = useState<ExamTable[] | null>(null);
+  const [totalCount, setTotalCount] = useState<number>(0);
+
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -107,8 +113,17 @@ export const useExamListData = () => {
       try {
         setLoading(true);
         const authToken = localStorage.getItem("authToken") || "NULL-TOKEN";
-        const data = await fetchExamListData(authToken);
-        setExamListData(data);
+        const params: FetchExamListParams = {
+          page: String(page || 1),
+          limit: String(perPage || 10),
+          search: searchData || "",
+          sortBy: "id",
+          order: "asc",
+        };
+
+        const data = await fetchExamListData(authToken, params);
+        setExamListData(data.data);
+        setTotalCount(data.totalCount);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Unexpected error");
       } finally {
@@ -116,9 +131,9 @@ export const useExamListData = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [searchData, page, perPage]);
 
-  return { examListData, loading, error };
+  return { examListData, loading, error, totalCount };
 };
 
 export const useListStudentsByExamId = (examId: number) => {

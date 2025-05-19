@@ -49,33 +49,37 @@ const AnnouncementPage = () => {
   return (
     <div className="h-full p-4 space-y-4 lg:w-[900px] sm:w-[400px]">
       <div className="space-y-4">
-        {anuncioListData.map(({ id, titulo, fecha, descripcion, visto }) => (
-          <Card
-            key={id}
-            className={`transition-all ${visto ? "opacity-50" : ""}`}
-          >
-            <CardHeader>
-              <CardTitle className="flex items-center justify-between">
-                <span>{titulo}</span>
-                <span className="text-sm text-gray-500">
-                  {new Date(fecha).toLocaleDateString()}
-                </span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p>{descripcion}</p>
-            </CardContent>
-            <CardFooter className="flex items-center justify-between">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => markAsRead(id)}
-              >
-                Marcar como leído
-              </Button>
-            </CardFooter>
-          </Card>
-        ))}
+        {[...anuncioListData]
+          .sort(
+            (a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime()
+          )
+          .map(({ id, titulo, fecha, descripcion, visto }) => (
+            <Card
+              key={id}
+              className={`transition-all ${visto ? "opacity-50" : ""}`}
+            >
+              <CardHeader>
+                <CardTitle className="flex items-center justify-between">
+                  <span>{titulo}</span>
+                  <span className="text-sm text-gray-500">
+                    {new Date(fecha).toLocaleDateString()}
+                  </span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p>{descripcion}</p>
+              </CardContent>
+              <CardFooter className="flex items-center justify-between">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => markAsRead(id)}
+                >
+                  Marcar como leído
+                </Button>
+              </CardFooter>
+            </Card>
+          ))}
       </div>
     </div>
   );
