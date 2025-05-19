@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Settings } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -27,38 +27,36 @@ const renderActiveShape = (props: any) => {
     </g>
   );
 };
+
 interface CountChartProps {
   dashboardData: {
     total_estudiantes: number;
     total_estudiantes_con_incidencias: number;
     total_estudiantes_sin_incidencias: number;
   } | null;
-  examTotalData: {
-    total_examenes: number;
-    total_examenes_con_incidencias: number;
-    total_examenes_sin_incidencias: number;
-  } | null;
 }
 
-export function CountChart({ dashboardData, examTotalData }: CountChartProps) {
+export function CountChart({ dashboardData }: CountChartProps) {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
-  const [currentData, setCurrentData] = useState<any[]>([
-    { name: "Correctos", value: 0, color: "hsl(var(--chart-2))" },
-    { name: "Incidentes", value: 0, color: "hsl(var(--chart-1))" },
-  ]);
-  const [title, setTitle] = useState("Total de Exámenes");
-  const [isExamMode, setIsExamMode] = useState(true);
 
-  // Actualizar los datos de exámenes
-  const examData = getNewExamData(examTotalData);
-
-  // Actualizar los datos de estudiantes
-  const studentData = getNewStudentData(dashboardData);
-
-  useEffect(() => {
-    // Seteamos los datos iniciales con exámenes
-    setCurrentData(examData);
-  }, [examTotalData]);
+  // Datos de estudiantes
+  const studentData = dashboardData
+    ? [
+        {
+          name: "Estudiantes Correctos",
+          value: dashboardData.total_estudiantes_sin_incidencias || 0,
+          color: "hsl(var(--chart-2))",
+        },
+        {
+          name: "Estudiantes Incidentes",
+          value: dashboardData.total_estudiantes_con_incidencias || 0,
+          color: "hsl(var(--chart-1))",
+        },
+      ]
+    : [
+        { name: "Correctos", value: 0, color: "hsl(var(--chart-2))" },
+        { name: "Incidentes", value: 0, color: "hsl(var(--chart-1))" },
+      ];
 
   const onPieEnter = (_: any, index: number) => {
     setActiveIndex(index);
@@ -68,43 +66,27 @@ export function CountChart({ dashboardData, examTotalData }: CountChartProps) {
     setActiveIndex(null);
   };
 
-  // Determinar el total en función del modo actual
-  const total = isExamMode
-    ? examTotalData?.total_examenes || 0
-    : dashboardData?.total_estudiantes || 0;
-
   return (
     <Card className="w-full h-full shadow-lg bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
       <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
         <CardTitle className="text-2xl font-bold text-gray-800 dark:text-gray-100">
-          {title}
+          Total de Estudiantes
         </CardTitle>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="h-[30px]">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-[30px]"
+              onClick={() => {}}
+            >
               <Settings className="w-5 h-5" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuItem
-              onClick={() => {
-                setCurrentData(examData);
-                setTitle("Total de Exámenes");
-                setIsExamMode(true);
-              }}
-            >
-              Mostrar Exámenes
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() => {
-                setCurrentData(studentData);
-                setTitle("Total de Estudiantes");
-                setIsExamMode(false);
-              }}
-            >
-              Mostrar Estudiantes
-            </DropdownMenuItem>
-          </DropdownMenuContent>
+          {/* <DropdownMenuContent>
+            <DropdownMenuItem disabled>Mostrar Exámenes</DropdownMenuItem>
+            <DropdownMenuItem disabled>Mostrar Estudiantes</DropdownMenuItem>
+          </DropdownMenuContent> */}
         </DropdownMenu>
       </CardHeader>
 
@@ -113,7 +95,7 @@ export function CountChart({ dashboardData, examTotalData }: CountChartProps) {
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
-                data={currentData}
+                data={studentData}
                 cx="50%"
                 cy="50%"
                 innerRadius={60}
@@ -126,7 +108,7 @@ export function CountChart({ dashboardData, examTotalData }: CountChartProps) {
                 activeIndex={activeIndex ?? undefined}
                 activeShape={renderActiveShape}
               >
-                {currentData.map((entry, index) => (
+                {studentData.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={entry.color} />
                 ))}
               </Pie>
@@ -135,14 +117,14 @@ export function CountChart({ dashboardData, examTotalData }: CountChartProps) {
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="text-center">
               <p className="text-4xl font-bold text-gray-800 dark:text-gray-100">
-                {total.toLocaleString()}
+                {(dashboardData?.total_estudiantes || 0).toLocaleString()}
               </p>
               <p className="text-sm text-gray-500 dark:text-gray-400">Total</p>
             </div>
           </div>
         </div>
-        <div className="flex justify-center items-center gap-8 h-full w-full">
-          {currentData.map((item, index) => (
+        <div className="flex items-center justify-center w-full h-full gap-8">
+          {studentData.map((item, index) => (
             <div
               key={index}
               className="flex flex-col items-center justify-center gap-2 transition-transform duration-200 ease-in-out transform hover:scale-105"
@@ -163,56 +145,4 @@ export function CountChart({ dashboardData, examTotalData }: CountChartProps) {
       </CardContent>
     </Card>
   );
-}
-
-function getNewStudentData(
-  dashboardData: {
-    total_estudiantes: number;
-    total_estudiantes_con_incidencias: number;
-    total_estudiantes_sin_incidencias: number;
-  } | null
-) {
-  return dashboardData
-    ? [
-        {
-          name: "Estudiantes Correctos",
-          value: dashboardData.total_estudiantes_sin_incidencias || 0,
-          color: "hsl(var(--chart-2))",
-        },
-        {
-          name: "Estudiantes Incidentes",
-          value: dashboardData.total_estudiantes_con_incidencias || 0,
-          color: "hsl(var(--chart-1))",
-        },
-      ]
-    : [
-        { name: "Correctos", value: 0, color: "hsl(var(--chart-2))" },
-        { name: "Incidentes", value: 0, color: "hsl(var(--chart-1))" },
-      ];
-}
-
-function getNewExamData(
-  examTotalData: {
-    total_examenes: number;
-    total_examenes_con_incidencias: number;
-    total_examenes_sin_incidencias: number;
-  } | null
-) {
-  return examTotalData
-    ? [
-        {
-          name: "Exámenes Correctos",
-          value: examTotalData.total_examenes_sin_incidencias || 0,
-          color: "hsl(var(--chart-2))",
-        },
-        {
-          name: "Exámenes Incidentes",
-          value: examTotalData.total_examenes_con_incidencias || 0,
-          color: "hsl(var(--chart-1))",
-        },
-      ]
-    : [
-        { name: "Correctos", value: 0, color: "hsl(var(--chart-2))" },
-        { name: "Incidentes", value: 0, color: "hsl(var(--chart-1))" },
-      ];
 }
