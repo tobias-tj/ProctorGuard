@@ -1,15 +1,16 @@
 import { logoutGeneral } from "@/utils/logoutGeneral";
 import axios from "axios";
 
-const API_URL = import.meta.env.VITE_API_URL;
-
 export const fetchReportMonthsData = async (authToken: string) => {
   try {
-    const response = await axios.get(`${API_URL}/getReportMonths`, {
-      headers: {
-        Authorization: `Bearer ${authToken}`,
-      },
-    });
+    const response = await axios.get(
+      `https://api.yvagacore.com/back/api/getReportMonths`,
+      {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      }
+    );
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {

@@ -15,7 +15,7 @@ export const useAnuncioListData = () => {
       try {
         setLoading(true);
         const authToken = localStorage.getItem("authToken") || "NULL-TOKEN";
-        const response = await fetchAllAnuncios(authToken, true);
+        const response = await fetchAllAnuncios(authToken, false);
 
         // Verifica que la respuesta tenga la propiedad `data` y sea un array
         if (response && Array.isArray(response.data)) {
@@ -40,7 +40,7 @@ export const useAnuncioListData = () => {
       await updateAnuncio(id, authToken);
 
       // Después de la actualización, recarga la lista de anuncios
-      const response = await fetchAllAnuncios(authToken, true);
+      const response = await fetchAllAnuncios(authToken, false);
       if (response && Array.isArray(response.data)) {
         setAnuncioListData(response.data);
       }

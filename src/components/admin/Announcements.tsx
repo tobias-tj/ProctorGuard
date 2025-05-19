@@ -93,7 +93,7 @@ const Announcements = () => {
             >
               <div className="flex items-center justify-between">
                 <h2 className="font-medium">{announcement.title}</h2>
-                <span className="px-2 py-1 text-xs bg-white rounded-md text-gray-50 dark:bg-gray-700 dark:text-gray-50">
+                <span className="px-2 py-1 text-xs text-gray-500 bg-white rounded-md dark:text-gray-50 dark:bg-gray-700">
                   {announcement.date}
                 </span>
               </div>
