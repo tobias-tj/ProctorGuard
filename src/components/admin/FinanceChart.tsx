@@ -12,23 +12,22 @@ import { Settings } from "lucide-react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "../ui/button";
+import { ReportMonths } from "@/types/ReportMonths";
+import { Skeleton } from "../ui/skeleton";
 
-const data = [
-  { name: "Ene", correct: 219, incident: 184 },
-  { name: "Feb", correct: 150, incident: 230 },
-  { name: "Mar", correct: 130, incident: 100 },
-  { name: "Abr", correct: 200, incident: 126 },
-  { name: "May", correct: 100, incident: 200 },
-  { name: "Jun", correct: 45, incident: 21 },
-  { name: "Jul", correct: 126, incident: 110 },
-  { name: "Ago", correct: 99, incident: 32 },
-  { name: "Sep", correct: 100, incident: 59 },
-  { name: "Oct", correct: 98, incident: 180 },
-  { name: "Nov", correct: 150, incident: 98 },
-  { name: "Dic", correct: 129, incident: 100 },
-];
+interface FinanceChartProps {
+  reportMonths: ReportMonths | undefined;
+  loading: boolean;
+}
 
-export function FinanceChart() {
+export function FinanceChart({ reportMonths, loading }: FinanceChartProps) {
+  const chartData =
+    reportMonths?.lista.map((item) => ({
+      name: item.mes,
+      correct: Number(item.examenesSinReportes),
+      incident: Number(item.examenesConReportes),
+    })) || [];
+
   return (
     <Card className="w-full h-full shadow-lg bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
       <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
@@ -45,62 +44,72 @@ export function FinanceChart() {
         </Button>
       </CardHeader>
       <CardContent className="h-full">
-        <ResponsiveContainer width="100%" height="90%">
-          <LineChart
-            data={data}
-            margin={{
-              top: 5,
-              right: 30,
-              left: 20,
-              bottom: 5,
-            }}
-          >
-            <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-            <XAxis
-              dataKey="name"
-              axisLine={false}
-              tick={{
-                fill: "hsl(var(--muted-foreground))",
+        {loading ? (
+          <div className="flex items-center justify-center w-full h-full">
+            <Skeleton className="w-full h-[90%] rounded-md" />
+          </div>
+        ) : (
+          <ResponsiveContainer width="100%" height="90%">
+            <LineChart
+              data={chartData}
+              margin={{
+                top: 5,
+                right: 30,
+                left: 20,
+                bottom: 5,
               }}
-              tickLine={false}
-              tickMargin={10}
-            />
-            <YAxis
-              axisLine={false}
-              tick={{
-                fill: "hsl(var(--muted-foreground))",
-              }}
-              tickLine={false}
-              tickMargin={20}
-            />
-            <Tooltip
-              contentStyle={{
-                borderRadius: "8px",
-                borderColor: "hsl(var(--border))",
-              }}
-            />
-            <Legend
-              align="left"
-              verticalAlign="top"
-              wrapperStyle={{
-                paddingTop: "10px",
-                paddingBottom: "30px",
-              }}
-            />
-            <Line
-              type="monotone"
-              dataKey="correct"
-              stroke="hsl(var(--chart-2))"
-              strokeWidth={4}
-            />
-            <Line
-              type="monotone"
-              dataKey="incident"
-              stroke="hsl(var(--chart-1))"
-              strokeWidth={4}
-            />
-          </LineChart>
-        </ResponsiveContainer>
+            >
+              <CartesianGrid
+                strokeDasharray="3 3"
+                stroke="hsl(var(--border))"
+              />
+              <XAxis
+                dataKey="name"
+                axisLine={false}
+                tick={{
+                  fill: "hsl(var(--muted-foreground))",
+                }}
+                tickLine={false}
+                tickMargin={10}
+              />
+              <YAxis
+                axisLine={false}
+                tick={{
+                  fill: "hsl(var(--muted-foreground))",
+                }}
+                tickLine={false}
+                tickMargin={20}
+              />
+              <Tooltip
+                contentStyle={{
+                  borderRadius: "8px",
+                  borderColor: "hsl(var(--border))",
+                }}
+              />
+              <Legend
+                align="left"
+                verticalAlign="top"
+                wrapperStyle={{
+                  paddingTop: "10px",
+                  paddingBottom: "30px",
+                }}
+              />
+              <Line
+                type="monotone"
+                dataKey="correct"
+                stroke="hsl(var(--chart-2))"
+                strokeWidth={4}
+              />
+              <Line
+                type="monotone"
+                dataKey="incident"
+                stroke="hsl(var(--chart-1))"
+                strokeWidth={4}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        )}
+        ;
       </CardContent>
     </Card>
   );
