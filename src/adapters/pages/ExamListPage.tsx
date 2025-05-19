@@ -269,7 +269,9 @@ const ExamListPage = () => {
                   <PaginationPrevious
                     href="#"
                     onClick={() => setPage((prev) => Math.max(1, prev - 1))}
-                    disabled={page === 1}
+                    className={
+                      page === 1 ? "pointer-events-none opacity-50" : ""
+                    }
                   />
                 </PaginationItem>
 
@@ -281,7 +283,11 @@ const ExamListPage = () => {
                     onClick={() =>
                       setPage((prev) => Math.min(totalPages, prev + 1))
                     }
-                    disabled={page === totalPages}
+                    className={
+                      page === totalPages
+                        ? "pointer-events-none opacity-50"
+                        : ""
+                    }
                   />
                 </PaginationItem>
               </PaginationContent>
